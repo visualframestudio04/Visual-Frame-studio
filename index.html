@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Frame Studio | Cinematic Storytelling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            scroll-behavior: smooth;
+        }
+
+        .glass-nav {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-card:hover,
+        .software-card:hover {
+            transform: translateY(-10px);
+            border-color: #3b82f6;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Smooth animation for sections */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom zoom effect for team photos */
+        .team-img-container img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .team-img-container:hover img {
+            transform: scale(1.15);
+        }
+
+        /* Social Icon Hover */
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: #3b82f6;
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Menu Transition */
+        #mobile-menu-overlay {
+            transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tighter uppercase">
+                Visual <span class="text-blue-500 text-3xl">Frame</span>
+            </div>
+            <!-- Desktop Links -->
+            <div class="hidden md:flex space-x-8 font-medium text-sm lg:text-base">
+                <a href="#home" class="hover:text-blue-500 transition">Home</a>
+                <a href="#services" class="hover:text-blue-500 transition">Services</a>
+                <a href="portfolio.html" class="hover:text-blue-500 transition">Portfolio</a>
+                <a href="careers.html" class="hover:text-blue-500 transition">Careers</a>
+                <a href="#team" class="hover:text-blue-500 transition">Team</a>
+                <a href="contact.html" class="hover:text-blue-500 transition text-blue-400 font-bold">Collaborate</a>
+            </div>
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-blue-500 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay"
+        class="fixed inset-0 z-[60] bg-black/95 flex flex-col items-center justify-center space-y-8 text-2xl font-bold uppercase tracking-widest opacity-0 pointer-events-none translate-y-[-20px]">
+        <button id="mobile-menu-close" class="absolute top-6 right-6 text-blue-500">
+            <i class="fas fa-times text-3xl"></i>
+        </button>
+        <a href="#home" class="mobile-link hover:text-blue-500 transition">Home</a>
+        <a href="#services" class="mobile-link hover:text-blue-500 transition">Services</a>
+        <a href="portfolio.html" class="mobile-link hover:text-blue-500 transition">Portfolio</a>
+        <a href="careers.html" class="mobile-link hover:text-blue-500 transition">Careers</a>
+        <a href="#team" class="mobile-link hover:text-blue-500 transition">Team</a>
+        <a href="contact.html" class="mobile-link hover:text-blue-500 transition text-blue-400">Collaborate</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Overlay -->
+        <div class="absolute inset-0 bg-black/60 z-10"></div>
+
+        <!-- Desktop Video (Horizontal) -->
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover hidden md:block z-0">
+            <source src="Main.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Mobile Video (Vertical) -->
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover block md:hidden z-0">
+            <source src="Main_Mobile.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="relative z-20 text-center px-4 max-w-4xl">
+            <h1 class="text-5xl md:text-8xl font-bold mb-6 tracking-tight leading-tight uppercase">
+                Crafting <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Cinematic</span>
+                Stories
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-10 font-light italic">
+                Cinematic Videos • Creative Designs • Powerful Stories
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="portfolio.html" class="btn-primary px-8 py-4 rounded-full font-bold text-lg shadow-lg">
+                    🎥 View Portfolio
+                </a>
+                <a href="contact.html"
+                    class="border border-white/20 hover:bg-white/10 px-8 py-4 rounded-full font-bold text-lg transition backdrop-blur-md">
+                    🚀 Start Your Project Today
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <a href="#about" class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer z-20">
+            <i class="fas fa-chevron-down text-2xl text-gray-500 hover:text-blue-500 transition"></i>
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6 reveal">
+        <div class="max-w-5xl mx-auto text-center">
+            <h2 class="text-3xl md:text-5xl font-bold mb-8 uppercase tracking-widest">The Vision</h2>
+            <p class="text-lg md:text-2xl text-gray-400 leading-relaxed font-light">
+                Visual Frame Studio is more than just a production house; it's a hub of creativity.
+                Guided by Founder Pranav Garasiya's vision, we transform simple visuals into cinematic masterpieces.
+                Our core focus is on Quality, Emotion, and a Disciplined Workflow.
+            </p>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-zinc-950 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div
+                class="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-6 text-center md:text-left">
+                <h2 class="text-4xl md:text-6xl font-bold uppercase leading-none">What We <br
+                        class="hidden md:block"><span class="text-blue-500">Offer</span></h2>
+                <p class="text-gray-400 max-w-sm text-sm md:text-base">From cinematic reels to high-end brand graphics,
+                    we provide complete media solutions designed to engage your audience.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div
+                    class="service-card border border-white/10 p-10 rounded-3xl bg-zinc-900 transition duration-300 text-center md:text-left">
+                    <i class="fas fa-video text-4xl text-blue-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Video Editing</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">We breathe life into your footage with professional
+                        color grading, immersive sound design, and cinematic transitions.</p>
+                </div>
+                <!-- Service 2 -->
+                <div
+                    class="service-card border border-white/10 p-10 rounded-3xl bg-zinc-900 transition duration-300 text-center md:text-left">
+                    <i class="fas fa-palette text-4xl text-purple-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Graphic Design</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Creative social media posters, high-conversion
+                        thumbnails, and branding that strengthens your identity.</p>
+                </div>
+                <!-- Service 3 -->
+                <div
+                    class="service-card border border-white/10 p-10 rounded-3xl bg-zinc-900 transition duration-300 text-center md:text-left">
+                    <i class="fas fa-bullhorn text-4xl text-pink-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Social Media Content</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Engaging Instagram Reels, YouTube Shorts, and viral
+                        content strategies tailored for maximum growth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Section -->
+    <section id="software" class="py-24 px-6 reveal">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold uppercase tracking-widest mb-4 text-center">Tools of the <span
+                        class="text-blue-500">Trade</span></h2>
+                <p class="text-gray-400 font-light">Powering our creativity with industry-standard professional
+                    software.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/Adobe_Premiere_Pro.png" alt="Premiere Pro"
+                        class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">Premiere Pro</span>
+                </div>
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/Adobe_After_Effects.png" alt="After Effects"
+                        class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">After Effects</span>
+                </div>
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/Adobe_Photoshop.png" alt="Photoshop"
+                        class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">Photoshop</span>
+                </div>
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/Adobe_Illustrator.png" alt="Illustrator"
+                        class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">Illustrator</span>
+                </div>
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/DaVinci_Resolve_Studio.png" alt="DaVinci Resolve"
+                        class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">DaVinci</span>
+                </div>
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/blender.png" alt="Blender" class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">Blender</span>
+                </div>
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/figma.png" alt="Figma" class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">Figma</span>
+                </div>
+                <div
+                    class="software-card border border-white/5 bg-zinc-900/50 p-6 rounded-2xl flex flex-col items-center justify-center transition duration-300 backdrop-blur-sm">
+                    <img src="image/PNG/capcut.png" alt="Capcut" class="w-12 h-12 mb-4 object-contain text-center">
+                    <span class="text-xs uppercase font-bold tracking-widest text-center">Capcut</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-24 bg-zinc-950 px-6 reveal">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center uppercase tracking-widest">The <span
+                    class="text-blue-500">Team</span></h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Founder -->
+                <div class="text-center group">
+                    <div
+                        class="team-img-container w-56 h-56 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white/10 group-hover:border-blue-500 transition duration-500 relative">
+                        <a href="Pranav.html">
+                            <img src="image/team gallery/Pranav 001.jpg" class="w-full h-full object-cover"
+                                alt="Pranav Garasiya">
+                    </div>
+                    <h4 class="text-xl font-bold">Pranav Garasiya</h4>
+                    <p class="text-blue-500 font-medium">Creative Director</p>
+                    </a>
+
+                </div>
+                <!-- Team 1 -->
+                <div class="text-center group">
+                    <div
+                        class="team-img-container w-56 h-56 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white/10 group-hover:border-purple-500 transition duration-500">
+                        <a href="Parth.html"><img src="image/team gallery/Parth 001.png"
+                                class="w-full h-full object-cover" alt="Parth">
+                    </div>
+                    <h4 class="text-xl font-bold">Parth</h4>
+                    <p class="text-purple-400">Video Editor</p>
+                    </a>
+                </div>
+                <!-- Team 2 -->
+                <div class="text-center group">
+                    <div
+                        class="team-img-container w-56 h-56 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white/10 group-hover:border-pink-500 transition duration-500">
+                        <a href="rutu.html">
+                            <img src="image/team gallery/Rutu 001.jpg" class="w-full h-full object-cover" alt="Rutu">
+                    </div>
+                    <h4 class="text-xl font-bold">Rutu</h4>
+                    <p class="text-pink-500">Lead Graphic Designer</p>
+                    </a>
+                </div>
+                <!-- Team 3 -->
+                <div class="text-center group">
+                    <div
+                        class="team-img-container w-56 h-56 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white/10 group-hover:border-teal-500 transition duration-500">
+                        <a href="rupal.html">
+                            <img src="image/team gallery/Rupal 001.jpg" class="w-full h-full object-cover" alt="Rupal">
+                    </div>
+                    <h4 class="text-xl font-bold">Rupal</h4>
+                    <p class="text-teal-400">Graphic Designer</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 border-t border-white/10 bg-black">
+        <div class="max-w-7xl mx-auto px-6 text-center md:text-left">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+                <div class="space-y-4">
+                    <div class="text-3xl font-bold tracking-tighter uppercase">Visual <span
+                            class="text-blue-500">Frame</span></div>
+                    <p class="text-gray-500 text-sm max-w-xs mx-auto md:mx-0 font-light leading-relaxed">Elevating every
+                        frame with cinematic vision and creative precision.</p>
+                </div>
+                <div class="space-y-4">
+                    <h5 class="text-lg font-bold uppercase tracking-widest text-blue-500">Quick Links</h5>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#home" class="hover:text-white transition">Home</a></li>
+                        <li><a href="portfolio.html" class="hover:text-white transition">Portfolio</a></li>
+                        <li><a href="careers.html" class="hover:text-white transition">Careers (Join Us)</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h5 class="text-lg font-bold uppercase tracking-widest text-blue-500 text-center md:text-left">
+                        Follow Us</h5>
+                    <div class="flex justify-center md:justify-start gap-6 text-2xl">
+                        <a href="https://instagram.com/visualframestudio" target="_blank" class="social-icon hover:text-pink-500 transition"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/@visualframestudio" target="_blank" class="social-icon hover:text-red-500 transition"><i
+                                class="fab fa-youtube"></i></a>
+                        <a href="https://linkedin.com/company/Visual Frame.studio" target="_blank" class="social-icon hover:text-blue-500 transition"><i
+                                class="fab fa-linkedin-in"></i></a>
+                        <a href="https://facebook.com/visualframestudio" target="_blank" class="social-icon hover:text-blue-500 transition"><i
+                                class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-white/5 text-center text-gray-600 text-sm">&copy; 2026 Visual Frame
+                Studio. All Rights Reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu(show) {
+            if (show) {
+                mobileMenuOverlay.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                mobileMenuOverlay.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenuOverlay.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                mobileMenuOverlay.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', () => toggleMenu(true));
+        mobileMenuClose.addEventListener('click', () => toggleMenu(false));
+        mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+</body>
+
+</html>

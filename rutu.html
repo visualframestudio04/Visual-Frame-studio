@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutu | Lead Graphic Designer - Visual Frame Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at center, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+        }
+
+        .accent-border {
+            border-left: 4px solid #ec4899;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ec4899, #f97316);
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: #ec4899;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .software-icon {
+            filter: grayscale(100%);
+            transition: all 0.4s ease;
+        }
+        
+        .glass-card:hover .software-icon {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body class="selection:bg-pink-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 p-6 flex justify-between items-center bg-black/50 backdrop-blur-md border-b border-white/5">
+        <a href="index.html" class="text-xl font-bold uppercase tracking-tighter text-white">
+            Visual <span class="text-blue-500">Frame</span>
+        </a>
+        <div class="flex gap-6">
+            <a href="index.html" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white transition">
+                <i class="fas fa-arrow-left mr-1"></i> Studio
+            </a>
+            <a href="portfolio.html" class="text-xs font-bold uppercase tracking-widest text-pink-400 hover:text-pink-300 transition">
+                <i class="fas fa-th-large mr-1"></i> Designs
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden hero-gradient">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="z-10 text-center lg:text-left">
+                <span class="text-pink-500 font-bold uppercase tracking-[0.3em] mb-4 block">Lead Graphic Designer</span>
+                <h1 class="text-7xl md:text-9xl font-bold mb-6 tracking-tighter leading-none">RUTU</h1>
+                <p class="text-gray-400 text-lg md:text-xl font-light italic leading-relaxed mb-8">
+                    "Design is not just what it looks like, it's how it communicates."
+                </p>
+                <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                    <a href="#about" class="bg-white text-black px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-gray-200 transition">My Vision</a>
+                    <a href="https://www.instagram.com/rutu_design/" target="_blank" class="border border-white/20 px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-white/10 transition">
+                        <i class="fab fa-instagram mr-2"></i> Gallery
+                    </a>
+                </div>
+            </div>
+            <div class="relative flex justify-center">
+                <div class="w-72 h-72 md:w-[450px] md:h-[450px] rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700 bg-zinc-900">
+                    <img src="image/team gallery/Rutu 001.jpg" alt="Rutu - Lead Graphic Designer" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute -z-10 top-0 left-0 w-64 h-64 bg-pink-600/20 rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute -z-10 bottom-0 right-0 w-64 h-64 bg-orange-600/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 px-6">
+        <div class="max-w-4xl mx-auto reveal">
+            <h2 class="text-3xl md:text-5xl font-bold mb-12 uppercase italic tracking-tighter">Creative <span class="text-pink-500 font-normal not-italic">Art</span></h2>
+            <div class="space-y-8 text-gray-400 text-lg leading-relaxed font-light accent-border pl-8">
+                <p>
+                    As the **Lead Graphic Designer** at Visual Frame Studio, I believe that every pixel has a purpose. My work revolves around creating visual identities that are not only aesthetically pleasing but also strategically sound.
+                </p>
+                <p>
+                    I specialize in brand identity, high-conversion YouTube thumbnails, and social media marketing assets. My goal is to ensure that while the videos tell the story, the graphics capture the attention. 
+                </p>
+                <p>
+                    Working alongside our video production team, I translate cinematic themes into static art, creating a cohesive and powerful brand presence for all our clients.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Stack -->
+    <section class="py-24 px-6 bg-zinc-950">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center uppercase tracking-widest">Design <span class="text-pink-500">Toolkit</span></h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal">
+                <!-- Ps -->
+                <div class="glass-card p-8 rounded-3xl text-center">
+                    <img src="image/PNG/Adobe_Photoshop.png" alt="Photoshop" class="w-16 h-16 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Photoshop</span>
+                </div>
+                <!-- Ai -->
+                <div class="glass-card p-8 rounded-3xl text-center">
+                    <img src="image/PNG/Adobe_Illustrator.png" alt="Illustrator" class="w-16 h-16 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Illustrator</span>
+                </div>
+                <!-- Figma -->
+                <div class="glass-card p-8 rounded-3xl text-center">
+                    <img src="image/PNG/figma.png" alt="Figma" class="w-16 h-16 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Figma</span>
+                </div>
+                <!-- Canva -->
+                <div class="glass-card p-8 rounded-3xl text-center">
+                    <img src="image/PNG/capcut.png" alt="Canva" class="w-16 h-16 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Canva Pro</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills & Expertise -->
+    <section class="py-24 px-6">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div class="reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 uppercase tracking-widest">Skills</h2>
+                <div class="space-y-10">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold uppercase tracking-widest text-sm">Brand Identity</span>
+                            <span class="text-pink-500 font-bold">96%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" style="width: 96%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold uppercase tracking-widest text-sm">Thumbnail Design</span>
+                            <span class="text-pink-500 font-bold">98%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" style="width: 98%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold uppercase tracking-widest text-sm">Typography</span>
+                            <span class="text-pink-500 font-bold">90%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold uppercase tracking-widest text-sm">Layout Design</span>
+                            <span class="text-pink-500 font-bold">92%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
+                <div class="glass-card p-8 rounded-3xl">
+                    <i class="fas fa-magic text-pink-500 text-3xl mb-6"></i>
+                    <h3 class="text-xl font-bold mb-2">Aesthetic Focus</h3>
+                    <p class="text-sm text-gray-500">Balancing colors and whitespace to create premium visual harmony.</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl">
+                    <i class="fas fa-bullseye text-orange-500 text-3xl mb-6"></i>
+                    <h3 class="text-xl font-bold mb-2">Engagement</h3>
+                    <p class="text-sm text-gray-500">Designing thumbnails and posters that grab attention in 0.5 seconds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect -->
+    <section class="py-24 px-6 bg-zinc-950">
+        <div class="max-w-4xl mx-auto text-center reveal">
+            <h2 class="text-3xl md:text-5xl font-bold mb-12 uppercase tracking-widest">Connect with <span class="text-pink-500">Rutu</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+                <a href="mailto:contact@visualframestudio.com" class="glass-card p-8 rounded-3xl group">
+                    <i class="fas fa-envelope text-pink-500 text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <h4 class="font-bold uppercase text-xs tracking-widest mb-2">Email</h4>
+                    <p class="text-gray-400 text-xs">contact@visualframestudio.com</p>
+                </a>
+                <a href="https://www.instagram.com/rutu_design/" target="_blank" class="glass-card p-8 rounded-3xl group">
+                    <i class="fab fa-instagram text-orange-500 text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <h4 class="font-bold uppercase text-xs tracking-widest mb-2">Instagram</h4>
+                    <p class="text-gray-400 text-xs">@visualframestudio</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 bg-black">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-600 text-sm">&copy; 2026 Visual Frame Studio | Design Team</p>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+</body>
+
+</html>

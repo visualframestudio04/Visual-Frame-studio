@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pranav Garasiya | Founder - Visual Frame Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+        }
+
+        .accent-border {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .software-icon {
+            filter: grayscale(100%);
+            transition: all 0.4s ease;
+        }
+        
+        .glass-card:hover .software-icon {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body class="selection:bg-blue-500 selection:text-white">
+
+    <!-- Simple Back Nav -->
+    <nav class="fixed w-full z-50 p-6 flex justify-between items-center bg-black/50 backdrop-blur-md border-b border-white/5">
+        <a href="index.html" class="text-xl font-bold uppercase tracking-tighter">
+            Visual <span class="text-blue-500">Frame</span>
+        </a>
+        <div class="flex gap-6">
+            <a href="index.html" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white transition">
+                <i class="fas fa-home mr-1"></i> Studio
+            </a>
+            <a href="contact.html" class="text-xs font-bold uppercase tracking-widest text-blue-500 hover:text-blue-400 transition">
+                <i class="fas fa-envelope mr-1"></i> Contact
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden hero-gradient">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="z-10 text-center lg:text-left">
+                <span class="text-blue-500 font-bold uppercase tracking-[0.3em] mb-4 block">Creative Director</span>
+                <h1 class="text-6xl md:text-8xl font-bold mb-6 tracking-tighter leading-none">PRANAV <br>GARASIYA</h1>
+                <p class="text-gray-400 text-lg md:text-xl font-light italic leading-relaxed mb-8">
+                    "Turning raw visions into cinematic experiences through discipline and storytelling."
+                </p>
+                <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                    <a href="#about" class="bg-white text-black px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-gray-200 transition">My Journey</a>
+                    <a href="https://pranavgarasiya09.wixsite.com/pranav-editing-1" target="_blank" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-blue-500 transition shadow-lg shadow-blue-500/30">
+                        <i class="fas fa-external-link-alt mr-2"></i> Wix Portfolio
+                    </a>
+                </div>
+            </div>
+            <div class="relative flex justify-center">
+                <div class="w-72 h-72 md:w-[450px] md:h-[450px] rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
+                    <img src="image/team gallery/Pranav 001.jpg" alt="Pranav Garasiya" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute -z-10 top-0 left-0 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute -z-10 bottom-0 right-0 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biography Section -->
+    <section id="about" class="py-32 px-6">
+        <div class="max-w-4xl mx-auto reveal">
+            <h2 class="text-3xl md:text-5xl font-bold mb-12 uppercase italic tracking-tighter">About <span class="text-blue-500 font-normal not-italic">Me</span></h2>
+            <div class="space-y-8 text-gray-400 text-lg leading-relaxed font-light accent-border pl-8">
+                <p>
+                    I am the Founder and Creative Director of **Visual Frame Studio**. My obsession with cinema and visual storytelling started as a passion and evolved into a professional mission to bridge the gap between imagination and reality.
+                </p>
+                <p>
+                    Specializing in high-end video editing and cinematic vlog aesthetics, I lead a team of talented creators to deliver content that doesn't just look good, but feels powerful. Inspired by the likes of creators like `camerakabeta`, I focus on rhythm, color, and emotional impact.
+                </p>
+                <p>
+                    Whether it's documenting the grand **BAPS Mandir Murti Pratistha Mahotsav** or crafting a viral social media campaign, my goal is always the same: **Simple but powerful systems.**
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software I Use -->
+    <section class="py-24 px-6 bg-zinc-950">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center uppercase tracking-widest">My <span class="text-blue-500">Toolkit</span></h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 reveal">
+                <!-- Pr -->
+                <div class="glass-card p-6 rounded-3xl text-center">
+                    <img src="image/PNG/Adobe_Premiere_Pro.png" alt="Premiere Pro" class="w-12 h-12 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Premiere Pro</span>
+                </div>
+                <!-- Ae -->
+                <div class="glass-card p-6 rounded-3xl text-center">
+                    <img src="image/PNG/Adobe_After_Effects.png" alt="After Effects" class="w-12 h-12 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">After Effects</span>
+                </div>
+                <!-- Ps -->
+                <div class="glass-card p-6 rounded-3xl text-center">
+                    <img src="image/PNG/Adobe_Photoshop.png" alt="Photoshop" class="w-12 h-12 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Photoshop</span>
+                </div>
+                <!-- Ai -->
+                <div class="glass-card p-6 rounded-3xl text-center">
+                    <img src="image/PNG/Adobe_Illustrator.png" alt="Illustrator" class="w-12 h-12 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Illustrator</span>
+                </div>
+                <!-- Dv -->
+                <div class="glass-card p-6 rounded-3xl text-center">
+                    <img src="image/PNG/DaVinci_Resolve_Studio.png" alt="DaVinci" class="w-12 h-12 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">DaVinci</span>
+                </div>
+                <!-- Cp -->
+                <div class="glass-card p-6 rounded-3xl text-center">
+                    <img src="image/PNG/capcut.png" alt="Capcut" class="w-12 h-12 mx-auto mb-4 software-icon">
+                    <span class="text-xs font-bold uppercase tracking-widest">Capcut</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills & Expertise -->
+    <section class="py-24 px-6">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div class="reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 uppercase tracking-widest">Expertise</h2>
+                <div class="space-y-10">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold uppercase tracking-widest text-sm">Cinematic Video Editing</span>
+                            <span class="text-blue-500 font-bold">95%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold uppercase tracking-widest text-sm">Creative Direction</span>
+                            <span class="text-blue-500 font-bold">90%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold uppercase tracking-widest text-sm">Social Media Strategy</span>
+                            <span class="text-blue-500 font-bold">85%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
+                <div class="glass-card p-8 rounded-3xl">
+                    <i class="fas fa-microchip text-blue-500 text-3xl mb-6"></i>
+                    <h3 class="text-xl font-bold mb-2">System Focused</h3>
+                    <p class="text-sm text-gray-500">I believe in building systems that handle 2TB+ data with ease and precision.</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl">
+                    <i class="fas fa-rocket text-orange-500 text-3xl mb-6"></i>
+                    <h3 class="text-xl font-bold mb-2">Growth Vision</h3>
+                    <p class="text-sm text-gray-500">Turning Visual Frame into a global brand for professional media production.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="py-32 px-6 reveal">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-7xl font-bold mb-10 italic uppercase tracking-tighter">My <span class="text-blue-500 not-italic">Philosophy</span></h2>
+            <p class="text-2xl md:text-4xl font-light text-gray-300 leading-tight">
+                "Creativity is the soul, but Discipline is the skeleton that allows it to stand tall."
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section class="py-24 px-6 bg-zinc-950">
+        <div class="max-w-4xl mx-auto text-center reveal">
+            <h2 class="text-3xl md:text-5xl font-bold mb-12 uppercase tracking-widest">Get In <span class="text-blue-500">Touch</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <a href="mailto:pranavgrasiya09@gmail.com" class="glass-card p-8 rounded-3xl group">
+                    <i class="fas fa-envelope text-blue-500 text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <h4 class="font-bold uppercase text-xs tracking-widest mb-2">Email</h4>
+                    <p class="text-gray-400 text-xs truncate">pranavgrasiya09@gmail.com</p>
+                </a>
+                <a href="https://linkedin.com/in/pranav-n-garasiya" target="_blank" class="glass-card p-8 rounded-3xl group">
+                    <i class="fab fa-linkedin-in text-blue-400 text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <h4 class="font-bold uppercase text-xs tracking-widest mb-2">LinkedIn</h4>
+                    <p class="text-gray-400 text-xs">Pranav Garasiya</p>
+                </a>
+                <a href="https://www.instagram.com/pranav.edit_09/" target="_blank" class="glass-card p-8 rounded-3xl group">
+                    <i class="fab fa-instagram text-pink-500 text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <h4 class="font-bold uppercase text-xs tracking-widest mb-2">Instagram</h4>
+                    <p class="text-gray-400 text-xs">@pranav.edit_09</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 bg-black">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-600 text-sm">&copy; 2026 Visual Frame Studio | Founded by Pranav Garasiya</p>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+</body>
+
+</html>
