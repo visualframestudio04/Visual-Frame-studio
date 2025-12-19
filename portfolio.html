@@ -22,10 +22,18 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        .filter-btn {
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        /* Full blue fill when active */
         .filter-btn.active {
-            background: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
+            background: #3b82f6 !important;
+            color: white !important;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
 
         .portfolio-card {
@@ -52,8 +60,34 @@
             pointer-events: none;
         }
 
+        .modal-content-wrapper {
+            width: 100%;
+            max-height: 80vh; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        @media (min-width: 768px) {
+            .modal-content-wrapper {
+                max-height: 75vh;
+            }
+        }
+
         #mobile-menu-overlay {
             transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #filter-bar {
+            transition: transform 0.4s ease-in-out;
+        }
+
+        #modalVideo, .modal-img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -66,7 +100,6 @@
             <div class="text-2xl font-bold tracking-tighter uppercase">
                 <a href="index.html">Visual <span class="text-blue-500 text-3xl">Frame</span></a>
             </div>
-            <!-- Desktop Links -->
             <div class="hidden md:flex space-x-8 font-medium text-sm lg:text-base">
                 <a href="index.html#home" class="hover:text-blue-500 transition">Home</a>
                 <a href="index.html#services" class="hover:text-blue-500 transition">Services</a>
@@ -75,7 +108,6 @@
                 <a href="index.html#team" class="hover:text-blue-500 transition">Team</a>
                 <a href="contact.html" class="hover:text-blue-500 transition text-blue-400 font-bold">Collaborate</a>
             </div>
-            <!-- Mobile Menu Toggle Button -->
             <button id="mobile-menu-btn" class="md:hidden text-blue-500 focus:outline-none">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
@@ -93,35 +125,32 @@
         <a href="portfolio.html" class="mobile-link text-blue-500 transition">Portfolio</a>
         <a href="careers.html" class="mobile-link hover:text-blue-500 transition">Careers</a>
         <a href="index.html#team" class="mobile-link hover:text-blue-500 transition">Team</a>
-        <a href="contact.html"
-            class="mobile-link hover:text-blue-500 transition text-blue-400 font-bold">Collaborate</a>
+        <a href="contact.html" class="mobile-link hover:text-blue-500 transition text-blue-400 font-bold">Collaborate</a>
     </div>
 
-    <!-- Header Section -->
-    <section class="pt-32 pb-16 px-6 bg-zinc-950">
+    <!-- Header -->
+    <section class="pt-32 pb-10 px-6 bg-zinc-950">
         <div class="max-w-7xl mx-auto text-center">
             <h1 class="text-5xl md:text-7xl font-bold mb-4 uppercase tracking-tighter italic">Our <span
                     class="text-blue-500 not-italic">Work</span></h1>
-            <p class="text-gray-400 text-xl max-w-2xl mx-auto font-light leading-relaxed italic">
-                A premium organized gallery of our visual storytelling assets.
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed italic">
+                Organized cinematic excellence. Scroll to explore.
             </p>
         </div>
     </section>
 
-    <!-- Filters -->
-    <section class="py-8 px-6 sticky top-20 z-40 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-center gap-4">
-            <button class="filter-btn active border border-white/20 px-6 py-2 rounded-full font-bold transition"
-                onclick="filterSelection('all')">All Work</button>
-            <button
-                class="filter-btn border border-white/20 px-6 py-2 rounded-full font-bold transition hover:border-blue-500"
-                onclick="filterSelection('video')">Cinematic Films</button>
-            <button
-                class="filter-btn border border-white/20 px-6 py-2 rounded-full font-bold transition hover:border-blue-500"
-                onclick="filterSelection('reel')">Vertical Reels</button>
-            <button
-                class="filter-btn border border-white/20 px-6 py-2 rounded-full font-bold transition hover:border-blue-500"
-                onclick="filterSelection('design')">Graphic Design</button>
+    <!-- Filters Section (2x2 Mobile Grid Fixed) -->
+    <section id="filter-bar"
+        class="py-4 md:py-8 px-6 md:px-10 sticky top-20 z-40 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-4xl mx-auto grid grid-cols-2 md:flex md:flex-wrap md:justify-center gap-2 md:gap-4">
+            <button class="filter-btn active border border-white/20 px-3 md:px-6 py-2 rounded-full font-bold text-[11px] md:text-base transition text-center uppercase tracking-tight"
+                onclick="filterSelection('all', this)">All Work</button>
+            <button class="filter-btn border border-white/20 px-3 md:px-6 py-2 rounded-full font-bold text-[11px] md:text-base transition hover:border-blue-500 text-center uppercase tracking-tight"
+                onclick="filterSelection('video', this)">Cinematic Films</button>
+            <button class="filter-btn border border-white/20 px-3 md:px-6 py-2 rounded-full font-bold text-[11px] md:text-base transition hover:border-blue-500 text-center uppercase tracking-tight"
+                onclick="filterSelection('reel', this)">Vertical Reels</button>
+            <button class="filter-btn border border-white/20 px-3 md:px-6 py-2 rounded-full font-bold text-[11px] md:text-base transition hover:border-blue-500 text-center uppercase tracking-tight"
+                onclick="filterSelection('design', this)">Graphic Design</button>
         </div>
     </section>
 
@@ -129,422 +158,262 @@
     <section class="py-12 px-6">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolioGrid">
 
-            <!-- --- LOOP 1 START --- -->
-
-            <!-- LINE 1-2: Horizontal Videos 01-06 -->
-            <!-- Video 1 -->
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 01.mp4', 'Cinematic Highlight', 'Pre Wedding')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 01.png"
-                    class="w-full h-full object-cover opacity-80 group-hover:opacity-50 transition duration-500">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-pink-400 text-sm font-bold uppercase tracking-widest">Pre Wedding</span>
-                        <h3 class="text-2xl font-bold mt-1">Portfolio 01</h3>
-                    </div>
-                </div>
+            <!-- --- LOOP 1 --- -->
+            <!-- LINE 1-2: 6 Horizontal Videos -->
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 01.mp4', 'Cinematic Wedding', 'Pre Wedding Film')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 01.png" class="w-full h-full object-cover opacity-80 group-hover:opacity-50 transition duration-500">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-pink-400 text-sm font-bold uppercase">Pre Wedding</span><h3 class="text-2xl font-bold mt-1">Portfolio 01</h3></div></div>
             </div>
-            <!-- Video 2 -->
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 02.mp4', 'Dragon VFX', 'Motion Graphics')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 02.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-sm font-bold uppercase tracking-widest">VFX Showreel</span>
-                        <h3 class="text-2xl font-bold mt-1">Portfolio 02</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 02.mp4', 'Visual Story', 'VFX Motion')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 02.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">VFX</span><h3 class="text-2xl font-bold">Portfolio 02</h3></div></div>
             </div>
-            <!-- Video 3 -->
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 03.mp4', 'Grand Event', 'Cinematic')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 03.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-yellow-400 text-sm font-bold uppercase tracking-widest">Event</span>
-                        <h3 class="text-2xl font-bold mt-1">Portfolio 03</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 03.mp4', 'Grand Event', 'Cinematic')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 03.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-yellow-400 text-sm font-bold uppercase">Event</span><h3 class="text-2xl font-bold">Portfolio 03</h3></div></div>
             </div>
-            <!-- Video 4 -->
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 04.mp4', 'Director Cut', 'Commercial')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 04.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-teal-400 text-sm font-bold uppercase tracking-widest">Commercial</span>
-                        <h3 class="text-2xl font-bold mt-1">Portfolio 04</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 04.mp4', 'Production Cut', 'Commercial')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 04.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-teal-400 text-sm font-bold uppercase">Commercial</span><h3 class="text-2xl font-bold">Portfolio 04</h3></div></div>
             </div>
-            <!-- Video 5 -->
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 05.mp4', 'Visual Story', 'Film Edit')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 05.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase tracking-widest">Film Edit</span>
-                        <h3 class="text-2xl font-bold mt-1">Portfolio 05</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 05.mp4', 'Cinematic Flow', 'Film Edit')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 05.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Film Edit</span><h3 class="text-2xl font-bold">Portfolio 05</h3></div></div>
             </div>
-            <!-- Video 6 -->
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 06.mp4', 'Cinematic Flow', 'Production')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 06.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-teal-400 text-sm font-bold uppercase tracking-widest">Production</span>
-                        <h3 class="text-2xl font-bold mt-1">Portfolio 06</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 06.mp4', 'Director Cut', 'Studio Master')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 06.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">Production</span><h3 class="text-2xl font-bold">Portfolio 06</h3></div></div>
             </div>
 
-            <!-- LINE 3: Vertical Reels 01-03 -->
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 001.mp4', 'Trending Story', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 001.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold mt-1">Vertical 001</h3>
-                    </div>
-                </div>
+            <!-- LINE 3: 3 Vertical Reels -->
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 001.mp4', 'Cinematic Portrait', 'Instagram Reel')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 001.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold mt-1">Vertical 001</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 002.mp4', 'Aesthetic Motion', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 002.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-green-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold mt-1">Vertical 002</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 002.mp4', 'Aesthetic Motion', 'Instagram Reel')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 002.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold mt-1">Vertical 002</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 003.mp4', 'Cinematic Portrait', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 003.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-yellow-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold mt-1">Vertical 003</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 003.mp4', 'Trending Cut', 'Instagram Reel')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 003.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold mt-1">Vertical 003</h3></div></div>
             </div>
 
-            <!-- LINE 4-5: Graphic Designs 01-06 -->
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (1).jpg', 'Brand Identity', 'Graphic Design')">
+            <!-- LINE 4-5: 6 Graphic Designs -->
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (1).jpg', 'Brand Identity', 'Graphic Design')">
                 <img src="Portfolio/Graphic Design/Portfolio (1).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Branding</span>
-                        <h3 class="text-xl font-bold">Design 01</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 01</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (2).jpg', 'Social Media Post', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (2).jpg', 'Social Media', 'Graphic Design')">
                 <img src="Portfolio/Graphic Design/Portfolio (2).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Creative</span>
-                        <h3 class="text-xl font-bold">Design 02</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 02</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (3).jpg', 'Minimalist Poster', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (3).jpg', 'Campaign Art', 'Graphic Design')">
                 <img src="Portfolio/Graphic Design/Portfolio (3).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-pink-400 text-sm font-bold uppercase">Design</span>
-                        <h3 class="text-xl font-bold">Design 03</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 03</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (4).jpg', 'Campaign Art', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (4).jpg', 'Minimalist', 'Graphic Design')">
                 <img src="Portfolio/Graphic Design/Portfolio (4).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Marketing</span>
-                        <h3 class="text-xl font-bold">Design 04</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 04</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (5).jpg', 'Visual Concept', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (5).jpg', 'Visual Post', 'Graphic Design')">
                 <img src="Portfolio/Graphic Design/Portfolio (5).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-pink-400 text-sm font-bold uppercase">Concept</span>
-                        <h3 class="text-xl font-bold">Design 05</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 05</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (6).jpg', 'Studio Masterpiece', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (6).jpg', 'Studio Art', 'Graphic Design')">
                 <img src="Portfolio/Graphic Design/Portfolio (6).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Studio Art</span>
-                        <h3 class="text-xl font-bold">Design 06</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 06</h3></div></div>
             </div>
 
-            <!-- --- LOOP 2 START --- -->
-
+            <!-- --- LOOP 2 --- -->
             <!-- LINE 6-7: Horizontal Videos 07-12 -->
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 07.mp4', 'Final Cut', 'Production')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 07.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-sm font-bold uppercase">Film</span>
-                        <h3 class="text-xl font-bold">Portfolio 07</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 07.mp4', 'Production Cut', 'Film')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 07.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">Editing</span><h3 class="text-2xl font-bold">Portfolio 07</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 08.mp4', 'Cinematic Edit', 'Production')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 08.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-yellow-400 text-sm font-bold uppercase">Film</span>
-                        <h3 class="text-xl font-bold">Portfolio 08</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 08.mp4', 'Cinematic Edit', 'Film')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 08.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">Editing</span><h3 class="text-2xl font-bold">Portfolio 08</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/portfolio 09.mp4', 'Director Master', 'Production')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 09.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-green-400 text-sm font-bold uppercase">Film</span>
-                        <h3 class="text-xl font-bold">Portfolio 09</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/portfolio 09.mp4', 'Visual Story', 'Film')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 09.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">Editing</span><h3 class="text-2xl font-bold">Portfolio 09</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/portfolio 010.mp4', 'Visual Story 10', 'Production')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 010.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-cyan-400 text-sm font-bold uppercase">Film</span>
-                        <h3 class="text-xl font-bold">Portfolio 10</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/portfolio 010.mp4', 'Director Master', 'Film')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 010.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">Editing</span><h3 class="text-2xl font-bold">Portfolio 10</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 011.mp4', 'Final Cinematic', 'Production')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 011.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-sm font-bold uppercase">Film</span>
-                        <h3 class="text-xl font-bold">Portfolio 11</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 011.mp4', 'Final Touch', 'Film')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 011.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">Editing</span><h3 class="text-2xl font-bold">Portfolio 11</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 012.mp4', 'Premium Highlight', 'Production')">
-                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 012.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-sm font-bold uppercase">Film</span>
-                        <h3 class="text-xl font-bold">Portfolio 12</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item video relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Horizontal/Portfolio 012.mp4', 'Premium Piece', 'Film')">
+                <img src="Portfolio/Video Editing/Thumbnail_horizontal/Portfolio 012.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-sm font-bold uppercase">Editing</span><h3 class="text-2xl font-bold">Portfolio 12</h3></div></div>
             </div>
 
             <!-- LINE 8: Vertical Reels 04-06 -->
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 004.mp4', 'Reel Story 04', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 004.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold">Vertical 004</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 004.mp4', 'Urban Motion', 'Instagram')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 004.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold">Vertical 004</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 005.mp4', 'Reel Story 05', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 005.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold">Vertical 005</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 005.mp4', 'Story Cut', 'Instagram')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 005.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold">Vertical 005</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 006.mp4', 'Reel Story 06', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 006.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold">Vertical 006</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 006.mp4', 'Social Master', 'Instagram')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 006.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold">Vertical 006</h3></div></div>
             </div>
 
-            <!-- LINE 9-10: Graphic Designs 07-12 -->
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (7).jpg', 'Visual Post', 'Graphic Design')">
+            <!-- LINE 9-10: 6 More Graphic Designs -->
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (7).jpg', 'Studio Art', 'Graphic')">
                 <img src="Portfolio/Graphic Design/Portfolio (7).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Design</span>
-                        <h3 class="text-xl font-bold">Design 07</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 07</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (8).jpg', 'Visual Post', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (8).jpg', 'Brand Identity', 'Graphic')">
                 <img src="Portfolio/Graphic Design/Portfolio (8).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Design</span>
-                        <h3 class="text-xl font-bold">Design 08</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 08</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (9).jpg', 'Visual Post', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (9).jpg', 'Creative Concept', 'Graphic')">
                 <img src="Portfolio/Graphic Design/Portfolio (9).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Design</span>
-                        <h3 class="text-xl font-bold">Design 09</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 09</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (10).jpg', 'Brand Identity', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (10).jpg', 'Modern Post', 'Graphic')">
                 <img src="Portfolio/Graphic Design/Portfolio (10).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Branding</span>
-                        <h3 class="text-xl font-bold">Design 10</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 10</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (11).jpg', 'Creative Concept', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (11).jpg', 'Digital Art', 'Graphic')">
                 <img src="Portfolio/Graphic Design/Portfolio (11).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Concept</span>
-                        <h3 class="text-xl font-bold">Design 11</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 11</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (12).jpg', 'Premium Layout', 'Graphic Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (12).jpg', 'Artistic Layout', 'Graphic')">
                 <img src="Portfolio/Graphic Design/Portfolio (12).jpg" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-purple-400 text-sm font-bold uppercase">Layout</span>
-                        <h3 class="text-xl font-bold">Design 12</h3>
-                    </div>
-                </div>
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-purple-400 text-sm font-bold uppercase">Design</span><h3 class="text-xl font-bold">Project 12</h3></div></div>
             </div>
 
-            <!-- --- REMAINING ASSETS --- -->
-
-            <!-- Remaining Vertical 07-08 -->
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 007.mp4', 'Reel 007', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 007.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold">Vertical 007</h3>
-                    </div>
-                </div>
+            <!-- --- LOOP 3 (Verticals 7-8 + Main Pages + Rest of Designs) --- -->
+            
+            <!-- LINE 11: Final Verticals & Main Page 1 -->
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 007.mp4', 'Reel Story 07', 'Instagram')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 007.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold">Vertical 007</h3></div></div>
             </div>
-            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5"
-                onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 008.mp4', 'Reel 008', 'Instagram Reel')">
-                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 008.png"
-                    class="w-full h-full object-cover opacity-80">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span>
-                        <h3 class="text-xl font-bold">Vertical 008</h3>
-                    </div>
-                </div>
+            <div class="portfolio-card filter-item reel relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('video', 'Portfolio/Video Editing/Vertical/Vertical 008.mp4', 'Final Reel 08', 'Instagram')">
+                <img src="Portfolio/Video Editing/Thumbnail_Vertical/vertical thumbnill 008.png" class="w-full h-full object-cover opacity-80">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-blue-400 text-xs font-bold uppercase">Reel</span><h3 class="text-xl font-bold">Vertical 008</h3></div></div>
             </div>
-
-            <!-- Main Page Designs -->
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio main page 001.png', 'Visual Frame Identity', 'Main Design')">
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[9/16] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio main page 001.png', 'Studio Identity', 'Main Design')">
                 <img src="Portfolio/Graphic Design/Portfolio main page 001.png" class="w-full h-full object-cover">
-                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6">
-                    <div><span class="text-teal-400 text-sm font-bold uppercase font-bold">Studio Art</span>
-                        <h3 class="text-xl font-bold">Main Identity 01</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio main page 002.jpg', 'Studio Art 02', 'Main Design')">
-                <img src="Portfolio/Graphic Design/Portfolio main page 002.jpg" class="w-full h-full object-cover">
-            </div>
-            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5"
-                onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio main page 003.jpg', 'Studio Art 03', 'Main Design')">
-                <img src="Portfolio/Graphic Design/Portfolio main page 003.jpg" class="w-full h-full object-cover">
+                <div class="video-overlay absolute inset-0 flex flex-col justify-end p-6"><div><span class="text-teal-400 text-xs font-bold uppercase font-bold">Studio Art</span><h3 class="text-xl font-bold">Main Identity 01</h3></div></div>
             </div>
 
-            <!-- Add other designs (13-24) as needed following the same pattern -->
+            <!-- LINE 12-13: Graphic Designs 13-18 -->
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (13).jpg', 'Premium Post', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (13).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (14).jpg', 'Visual Concept', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (14).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (15).jpg', 'Brand Story', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (15).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (16).jpg', 'Creative Feed', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (16).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (17).jpg', 'Modern Layout', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (17).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (18).jpg', 'Studio Work', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (18).jpg" class="w-full h-full object-cover">
+            </div>
+
+            <!-- LINE 14-15: Graphic Designs 19-24 -->
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (19).jpg', 'Portfolio 19', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (19).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (20).jpg', 'Portfolio 20', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (20).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (21).jpg', 'Portfolio 21', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (21).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (22).jpg', 'Portfolio 22', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (22).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (23).jpg', 'Portfolio 23', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (23).jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-[4/5] bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio (24).jpg', 'Portfolio 24', 'Graphic')">
+                <img src="Portfolio/Graphic Design/Portfolio (24).jpg" class="w-full h-full object-cover">
+            </div>
+
+            <!-- FINAL ROW: Main Pages 002, 003 -->
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio main page 002.jpg', 'Studio Showcase 02', 'Main Design')">
+                <img src="Portfolio/Graphic Design/Portfolio main page 002.jpg" class="w-full h-full object-cover opacity-80">
+            </div>
+            <div class="portfolio-card filter-item design relative group overflow-hidden rounded-3xl aspect-video bg-zinc-900 border border-white/5" onclick="openModal('image', 'Portfolio/Graphic Design/Portfolio main page 003.jpg', 'Studio Showcase 03', 'Main Design')">
+                <img src="Portfolio/Graphic Design/Portfolio main page 003.jpg" class="w-full h-full object-cover opacity-80">
+            </div>
 
         </div>
     </section>
 
     <!-- Project Inquiry CTA -->
     <section class="py-24 px-6 bg-zinc-950 text-center">
-        <div
-            class="max-w-4xl mx-auto border border-white/10 p-16 rounded-[4rem] bg-gradient-to-t from-blue-900/10 to-transparent">
+        <div class="max-w-4xl mx-auto border border-white/10 p-16 rounded-[4rem] bg-gradient-to-t from-blue-900/10 to-transparent">
             <h2 class="text-4xl font-bold mb-6 italic">Have a vision in mind?</h2>
-            <p class="text-xl text-gray-400 mb-10">Ame tamari idea ne cinematic reality ma badlvama help kariye chhiye.
-            </p>
-            <a href="contact.html"
-                class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-full font-bold text-lg transition transform hover:scale-105">
+            <p class="text-xl text-gray-400 mb-10 leading-relaxed">Let's turn your ideas into cinematic reality. Contact our studio for premium production services.</p>
+            <a href="contact.html" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-full font-bold text-lg transition transform hover:scale-105 shadow-xl shadow-blue-500/20">
                 Start Your Project Today
             </a>
         </div>
     </section>
 
-
     <!-- Footer -->
     <footer class="py-12 border-t border-white/10 text-center text-gray-500">
         <p class="uppercase tracking-widest text-xs mb-4">&copy; 2026 Visual Frame Studio. All Rights Reserved.</p>
         <div class="flex justify-center space-x-8 text-xl">
-            <a href="https://www.instagram.com/visualframe.studio/" target="_blank"
-                class="hover:text-pink-500 transition"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.instagram.com/visualframe.studio/" target="_blank" class="hover:text-pink-500 transition"><i class="fab fa-instagram"></i></a>
             <a href="#" class="hover:text-red-500 transition"><i class="fab fa-youtube"></i></a>
-            <a href="https://wa.me/7984991628" target="_blank" class="hover:text-green-500 transition"><i
-                    class="fab fa-whatsapp"></i></a>
+            <a href="https://wa.me/7984991628" target="_blank" class="hover:text-green-500 transition"><i class="fab fa-whatsapp"></i></a>
         </div>
     </footer>
 
-    <!-- Modal (Lightbox) Structure -->
-    <div id="projectModal"
-        class="modal hidden fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-md"
-        onclick="closeModal()">
-        <div class="relative w-full max-w-5xl bg-zinc-900 rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10"
-            onclick="event.stopPropagation()">
-            <!-- Close button -->
-            <button onclick="closeModal()"
-                class="absolute top-6 right-6 z-10 w-12 h-12 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center transition text-white">
+    <!-- LIGHTBOX MODAL -->
+    <div id="projectModal" class="modal hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/98 backdrop-blur-md p-0 sm:p-6 lg:p-12" onclick="closeModal()">
+        <div class="relative w-full max-w-6xl bg-zinc-950 sm:bg-zinc-900 sm:rounded-[2.5rem] overflow-hidden shadow-2xl border-0 sm:border sm:border-white/10" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-[110] w-10 h-10 sm:w-12 sm:h-12 bg-black/60 hover:bg-black/90 rounded-full flex items-center justify-center transition text-white border border-white/10">
                 <i class="fas fa-times text-xl"></i>
             </button>
-            <!-- Content container -->
-            <div class="modal-content-wrapper aspect-video bg-black flex items-center justify-center" id="modalContent">
-            </div>
-            <!-- Project Info -->
-            <div class="p-8 md:p-10 bg-zinc-900/50">
-                <span class="text-blue-500 text-xs font-bold uppercase tracking-[0.3em]"
-                    id="modalCategory">Category</span>
-                <h3 class="text-3xl md:text-4xl font-bold mt-2 tracking-tighter" id="modalTitle">Project Title</h3>
+            <div class="modal-content-wrapper" id="modalContent"></div>
+            <div class="p-6 md:p-10 bg-zinc-900/90 border-t border-white/5">
+                <span class="text-blue-500 text-xs font-bold uppercase tracking-[0.3em]" id="modalCategory">Category</span>
+                <h3 class="text-2xl md:text-4xl font-bold mt-1 tracking-tighter" id="modalTitle">Project Title</h3>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script>
+        // --- Auto Hide Filters Logic ---
+        let lastScrollTop = 0;
+        const filterBar = document.getElementById('filter-bar');
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > 250) {
+                filterBar.style.transform = 'translateY(-150%)'; 
+            } else {
+                filterBar.style.transform = 'translateY(0)'; 
+            }
+            lastScrollTop = scrollTop;
+        });
+
         // --- Mobile Menu Logic ---
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenuClose = document.getElementById('mobile-menu-close');
         const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
         const mobileLinks = document.querySelectorAll('.mobile-link');
-
         function toggleMenu(show) {
             if (show) {
                 mobileMenuOverlay.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
@@ -556,13 +425,12 @@
                 document.body.style.overflow = 'auto';
             }
         }
-
         mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(true); });
         mobileMenuClose.addEventListener('click', () => toggleMenu(false));
         mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
 
-        // --- Filter Logic ---
-        function filterSelection(c) {
+        // --- Filter Logic (Corrected to show full blue background) ---
+        function filterSelection(c, btn) {
             var x, i;
             x = document.getElementsByClassName("filter-item");
             if (c == "all") c = "";
@@ -572,15 +440,23 @@
                     x[i].style.display = "block";
                 }
             }
+            
+            // Remove active class from all buttons
             var btns = document.getElementsByClassName("filter-btn");
-            for (var i = 0; i < btns.length; i++) {
-                btns[i].classList.remove("active");
-                if (btns[i].innerText.toLowerCase().includes(c) || (c == "" && btns[i].innerText.includes("All"))) {
-                    btns[i].classList.add("active");
-                }
+            for (var j = 0; j < btns.length; j++) {
+                btns[j].classList.remove("active");
+            }
+            
+            // Add active class to clicked button
+            if (btn) {
+                btn.classList.add("active");
             }
         }
-        filterSelection('all');
+        
+        // Initialize
+        window.onload = function() {
+            filterSelection('all', document.querySelector('.filter-btn'));
+        };
 
         // --- Modal Logic ---
         function openModal(type, src, title, category) {
@@ -588,17 +464,14 @@
             const modalContent = document.getElementById('modalContent');
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalCategory').innerText = category;
-
             if (type === 'video') {
-                modalContent.innerHTML = `<video id="modalVideo" controls autoplay playsinline class="w-full h-full object-contain bg-black"><source src="${src}" type="video/mp4">Your browser does not support the video tag.</video>`;
+                modalContent.innerHTML = `<video id="modalVideo" controls autoplay playsinline><source src="${src}" type="video/mp4">Your browser does not support the video tag.</video>`;
             } else {
-                modalContent.innerHTML = `<img src="${src}" alt="${title}" class="w-full h-full object-contain">`;
+                modalContent.innerHTML = `<img src="${src}" alt="${title}" class="modal-img">`;
             }
-
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
-
         function closeModal() {
             const modal = document.getElementById('projectModal');
             const video = document.getElementById('modalVideo');
@@ -607,10 +480,7 @@
             setTimeout(() => { document.getElementById('modalContent').innerHTML = ''; }, 300);
             document.body.style.overflow = 'auto';
         }
-
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     </script>
-
 </body>
-
 </html>

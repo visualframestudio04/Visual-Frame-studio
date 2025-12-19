@@ -41,11 +41,10 @@
             outline: none;
         }
 
-        /* Specific styling for select options to ensure visibility */
+        /* Dropdown fix for visibility */
         select option {
-            background-color: #18181b; /* Dark background for options */
+            background-color: #121212;
             color: white;
-            padding: 10px;
         }
 
         .hero-text {
@@ -62,6 +61,21 @@
             z-index: 100;
             align-items: center;
             justify-content: center;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -83,58 +97,19 @@
     <!-- Hero Section -->
     <header class="pt-40 pb-20 px-6 text-center">
         <div class="max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 hero-text uppercase">Join the Vision</h1>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 hero-text uppercase tracking-tighter">Join the Vision</h1>
             <p class="text-gray-400 text-lg md:text-xl font-light leading-relaxed">
-                We are looking for creative storytellers, bold designers, and visual wizards to help us redefine cinematic content. Don't just work—create a legacy with Visual Frame Studio.
+                We are looking for creative storytellers, bold designers, and visual wizards. Let's create a legacy together at Visual Frame Studio.
             </p>
         </div>
     </header>
 
-    <!-- Open Positions -->
-    <section class="py-10 px-6">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Role 1 -->
-            <div class="glass-card p-8 rounded-[2rem]">
-                <div class="w-12 h-12 bg-blue-500/20 text-blue-500 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-video text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Video Editor</h3>
-                <p class="text-gray-500 text-sm mb-6 leading-relaxed">Expertise in Premiere Pro, After Effects, and a deep understanding of rhythm and storytelling.</p>
-                <div class="text-xs uppercase tracking-widest text-blue-400 font-bold">Full-time / Remote</div>
-            </div>
-
-            <!-- Role 2 -->
-            <div class="glass-card p-8 rounded-[2rem]">
-                <div class="w-12 h-12 bg-purple-500/20 text-purple-500 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-pen-nib text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Graphic Designer</h3>
-                <p class="text-gray-500 text-sm mb-6 leading-relaxed">Master of Photoshop & Illustrator. Capable of creating high-impact thumbnails and brand posters.</p>
-                <div class="text-xs uppercase tracking-widest text-purple-400 font-bold">Full-time / Project-based</div>
-            </div>
-
-            <!-- Role 3 -->
-            <div class="glass-card p-8 rounded-[2rem]">
-                <div class="w-12 h-12 bg-pink-500/20 text-pink-500 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-hashtag text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Content Strategist</h3>
-                <p class="text-gray-500 text-sm mb-6 leading-relaxed">Passionate about viral trends, analytics, and managing the online presence of high-profile clients.</p>
-                <div class="text-xs uppercase tracking-widest text-pink-400 font-bold">Contract</div>
-            </div>
-        </div>
-    </section>
-
     <!-- Application Form -->
-    <section id="apply-form" class="py-20 px-6">
+    <section id="apply-form" class="py-10 pb-24 px-6">
         <div class="max-w-3xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-5xl font-bold italic mb-4">Apply <span class="text-blue-500 font-normal not-italic">Now</span></h2>
-                <p class="text-gray-500">Show us what you've got. Let's build something epic together.</p>
-            </div>
-
-            <form id="careerForm" class="glass-card p-8 md:p-12 rounded-[3rem] space-y-6">
-                <!-- Row 1: Full Name & WhatsApp -->
+            <!-- Added name="submit-to-google-sheet" for easier identification -->
+            <form id="careerForm" name="submit-to-google-sheet" class="glass-card p-8 md:p-12 rounded-[3rem] space-y-6">
+                <!-- Name & WhatsApp -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-xs uppercase tracking-widest font-bold text-gray-400 mb-2">Full Name</label>
@@ -146,44 +121,45 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Email ID -->
+                <!-- Email Address -->
                 <div>
                     <label class="block text-xs uppercase tracking-widest font-bold text-gray-400 mb-2">Email Address</label>
                     <input type="email" name="email" required class="w-full px-5 py-4 rounded-2xl" placeholder="example@email.com">
                 </div>
 
-                <!-- Row 3: Role Selection -->
+                <!-- Role Selection -->
                 <div>
                     <label class="block text-xs uppercase tracking-widest font-bold text-gray-400 mb-2">Role Applying For</label>
                     <div class="relative">
-                        <select name="position" required class="w-full px-5 py-4 rounded-2xl appearance-none bg-zinc-900 text-white cursor-pointer">
-                            <option value="" disabled selected class="text-gray-500">Select Position</option>
-                            <option value="video-editor">Creative Video Editor</option>
-                            <option value="graphic-designer">Graphic Designer</option>
-                            <option value="content-strategist">Social Media Strategist</option>
-                            <option value="intern">Creative Intern</option>
+                        <select name="position" required class="w-full px-5 py-4 rounded-2xl appearance-none cursor-pointer">
+                            <option value="" disabled selected>Select Position</option>
+                            <option value="Creative Video Editor">Creative Video Editor</option>
+                            <option value="Graphic Designer">Graphic Designer</option>
+                            <option value="Social Media Strategist">Social Media Strategist</option>
+                            <option value="Creative Intern">Creative Intern</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-blue-500">
+                        <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none text-blue-500">
                             <i class="fas fa-chevron-down"></i>
                         </div>
                     </div>
                 </div>
 
-                <!-- Row 4: Portfolio Link -->
+                <!-- Portfolio Link -->
                 <div>
                     <label class="block text-xs uppercase tracking-widest font-bold text-gray-400 mb-2">Portfolio / Work Link *</label>
-                    <input type="url" name="portfolio" required class="w-full px-5 py-4 rounded-2xl" placeholder="Link to your Behance, YouTube, or Drive">
-                    <p class="text-[10px] text-gray-500 mt-2 italic">Crucial: We hire based on your work, not just your resume.</p>
+                    <input type="url" name="portfolio" required class="w-full px-5 py-4 rounded-2xl" placeholder="Drive, YouTube, or Behance Link">
                 </div>
 
-                <!-- Row 5: Experience -->
+                <!-- Experience -->
                 <div>
-                    <label class="block text-xs uppercase tracking-widest font-bold text-gray-400 mb-2">Tell us about your experience</label>
-                    <textarea name="experience" rows="4" class="w-full px-5 py-4 rounded-2xl" placeholder="What softwares do you use? What's your biggest project?"></textarea>
+                    <label class="block text-xs uppercase tracking-widest font-bold text-gray-400 mb-2">Experience & Skills</label>
+                    <textarea name="experience" rows="4" class="w-full px-5 py-4 rounded-2xl" placeholder="Briefly tell us about your experience and the software you use..."></textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl transition duration-300 transform hover:scale-[1.01] shadow-xl shadow-blue-500/20">
-                    Submit Application <i class="fas fa-chevron-right ml-2"></i>
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl transition duration-300 transform hover:scale-[1.01] shadow-xl shadow-blue-500/20 uppercase tracking-widest flex justify-center items-center gap-3">
+                    <span id="btnText">Submit Application</span>
+                    <div id="loader" class="loader"></div>
+                    <i id="btnIcon" class="fas fa-paper-plane"></i>
                 </button>
             </form>
         </div>
@@ -193,11 +169,11 @@
     <div id="successOverlay" class="success-overlay p-6">
         <div class="bg-zinc-950 border border-white/10 p-12 rounded-[3rem] max-w-lg text-center shadow-2xl">
             <div class="w-24 h-24 bg-blue-500/10 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-8 border border-blue-500/30">
-                <i class="fas fa-paper-plane text-4xl"></i>
+                <i class="fas fa-check text-4xl"></i>
             </div>
             <h2 class="text-4xl font-bold mb-4 uppercase tracking-tighter">Application Received</h2>
             <p class="text-gray-400 mb-10 font-light leading-relaxed">
-                Thank you for reaching out to Visual Frame Studio. Our team will review your portfolio and contact you via WhatsApp or Email if your style fits our vision.
+                Thank you! Our team will review your portfolio and reach out via WhatsApp or Email soon.
             </p>
             <a href="index.html" class="inline-block bg-white text-black font-bold px-10 py-4 rounded-full hover:bg-gray-200 transition uppercase tracking-widest text-xs">
                 Back to Home
@@ -205,23 +181,42 @@
         </div>
     </div>
 
-    <footer class="py-12 border-t border-white/10 bg-black text-center">
-        <div class="max-w-7xl mx-auto px-6">
-            <p class="text-gray-600 text-sm italic">"Creativity is intelligence having fun."</p>
-            <p class="text-gray-700 text-[10px] uppercase mt-4 tracking-[0.3em]">&copy; 2026 Visual Frame Studio</p>
-        </div>
-    </footer>
-
     <script>
-        document.getElementById('careerForm').addEventListener('submit', function(e) {
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbztr9oFf-ow03ayMmFaj9URnDwn9nyCY96pThTXTy1binqKPlUNUvS7EUWOClxYws6tPA/exec'; // <--- Paste your URL here
+        const form = document.forms['submit-to-google-sheet'];
+        const submitBtn = document.getElementById('submitBtn');
+        const loader = document.getElementById('loader');
+        const btnIcon = document.getElementById('btnIcon');
+        const btnText = document.getElementById('btnText');
+        const successOverlay = document.getElementById('successOverlay');
+
+        form.addEventListener('submit', e => {
             e.preventDefault();
-            const overlay = document.getElementById('successOverlay');
-            overlay.style.display = 'flex';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.body.style.overflow = 'hidden';
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            loader.style.display = 'block';
+            btnIcon.style.display = 'none';
+            btnText.innerText = 'Sending...';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    console.log('Success!', response);
+                    // Hide loader and show success overlay
+                    successOverlay.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    form.reset();
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    alert('Error submtiting form. Please try again or WhatsApp us directly.');
+                    submitBtn.disabled = false;
+                    loader.style.display = 'none';
+                    btnIcon.style.display = 'block';
+                    btnText.innerText = 'Submit Application';
+                });
         });
     </script>
 
 </body>
-
 </html>
