@@ -3,487 +3,752 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Command Center | Visual Frame</title>
+    <title>Visual Frame | Studio Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
+        :root {
+            --bg-deep: #020203;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --accent-teal: #14b8a6;
+            --card-glass: rgba(255, 255, 255, 0.02);
+            --border-glass: rgba(255, 255, 255, 0.06);
+        }
+
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #050505; 
+            background-color: var(--bg-deep); 
+            color: #f8fafc;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Cinematic FX */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .glass-panel {
+            background: var(--card-glass);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--border-glass);
+            border-radius: 32px;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: slideInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+        .nav-link {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #475569;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
             color: #ffffff;
-            overflow-x: hidden;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .glass { 
-            background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 28px;
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            right: 20px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--accent-blue);
         }
 
-        .gradient-stat { 
-            background: linear-gradient(135deg, #121212 0%, #080808 100%); 
-            border: 1px solid rgba(59, 130, 246, 0.15); 
-        }
-        
-        .tab-btn {
-            transition: all 0.3s ease;
-            color: #71717a;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.1em;
-            padding: 10px 24px;
-            border-radius: 14px;
-        }
-
-        .tab-btn.active {
-            color: #ffffff;
-            background: #3b82f6;
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
-        }
-
-        .status-pill {
-            background: #111;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #fff;
-            font-size: 10px;
-            padding: 6px 12px;
-            border-radius: 10px;
-            outline: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-action {
-            width: 38px; height: 38px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 12px;
+        .associate-badge {
             background: rgba(255,255,255,0.03);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-size: 10px;
+            font-weight: 700;
         }
 
-        .btn-action:hover { transform: translateY(-3px); background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-        .btn-delete:hover { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .modal-blur {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(25px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+        }
 
-        .modal-overlay {
-            position: fixed; inset: 0; z-index: 100;
-            display: none; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(12px);
+        .modal-content-anim {
+            animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.04) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #fff !important;
+            padding: 18px 22px !important;
+            border-radius: 24px !important;
+            outline: none !important;
+            transition: all 0.3s ease;
+        }
+
+        /* Dropdown Selection Fix */
+        select option {
+            background: #111 !important;
+            color: #fff !important;
+        }
+
+        input:focus, select:focus { 
+            border-color: var(--accent-blue) !important; 
+            background: rgba(59, 130, 246, 0.05) !important;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
         }
 
         .toast {
-            position: fixed; bottom: 30px; right: 30px;
-            padding: 16px 28px; border-radius: 18px;
-            background: #ffffff; color: #000000; font-weight: 800;
-            z-index: 1000; display: none;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            animation: slideIn 0.4s ease;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 1px;
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: #fff; color: #000; padding: 18px 36px; border-radius: 24px;
+            font-weight: 800; font-size: 14px; z-index: 2000; display: none;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
-
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        .loader-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-        
-        .row-updating { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
 
-        .badge-new { background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; }
-        
-        /* Matching Admin Footer Style */
-        .admin-footer {
-            background: linear-gradient(to top, #000, #050505);
-            border-top: 1px solid rgba(255,255,255,0.05);
+        /* Success Animation Classes */
+        #successState { display: none; }
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #3b82f6;
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
         }
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #fff;
+            stroke-miterlimit: 10;
+            margin: 10% auto;
+            box-shadow: inset 0px 0px 0px #3b82f6;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px #3b82f6; } }
     </style>
 </head>
-<body class="p-4 md:p-12">
+<body class="flex">
 
-    <!-- Toast Success Notification -->
-    <div id="toast" class="toast">Data Synced Successfully</div>
+    <div id="toast" class="toast">Matrix Sync Active</div>
 
-    <div class="max-w-7xl mx-auto min-h-screen">
-        <!-- Header Section -->
-        <header class="flex flex-col md:flex-row justify-between items-center mb-14 gap-8">
-            <div class="text-center md:text-left">
-                <h1 class="text-3xl md:text-5xl font-black uppercase tracking-tighter italic">VISUAL <span class="text-blue-500">FRAME</span> STUDIO</h1>
-                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] mt-2">Production Management Suite</p>
+    <!-- 1. LOGIN INTERFACE -->
+    <div id="loginGate" class="fixed inset-0 z-[1000] bg-black flex items-center justify-center p-6">
+        <div class="glass-panel p-16 w-full max-w-xl text-center border-blue-500/20 shadow-[0_0_60px_rgba(59,130,246,0.1)]">
+            <div class="mb-14">
+                <h1 class="text-6xl font-black italic uppercase tracking-tighter">VISUAL <span class="text-blue-500">FRAME</span></h1>
+                <p class="text-zinc-600 text-[10px] font-black uppercase tracking-[0.6em] mt-4">Command Center OS v2.0</p>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="hidden sm:flex bg-zinc-900/50 px-5 py-2.5 border border-white/5 rounded-full text-[9px] font-black uppercase tracking-widest text-green-500 items-center">
-                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-ping"></span> Live Cloud Connected
+            <div class="space-y-4 max-w-sm mx-auto">
+                <input type="password" id="loginPass" placeholder="Master Access Key" class="w-full text-center tracking-[1em] text-2xl font-bold">
+                <button onclick="handleLogin()" class="bg-blue-600 w-full py-6 rounded-[2rem] font-black uppercase text-xs tracking-widest hover:bg-blue-500 transition shadow-2xl">Initialize Workspace</button>
+            </div>
+            <p id="loginError" class="text-red-500 text-[10px] mt-10 font-black uppercase hidden tracking-[0.2em]">Authentication Failed</p>
+        </div>
+    </div>
+
+    <!-- 2. NAVIGATION SIDEBAR -->
+    <aside class="w-80 p-10 flex flex-col h-screen shrink-0 border-r border-white/[0.03] z-50">
+        <div class="mb-16 px-4">
+            <h2 class="text-3xl font-black italic uppercase tracking-tighter">VF <span class="text-blue-500">STUDIO</span></h2>
+            <p class="text-[9px] font-black text-zinc-700 uppercase tracking-widest mt-2">Executive Admin Hub</p>
+        </div>
+        
+        <nav class="flex-grow space-y-3">
+            <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-link active w-full flex items-center gap-5 px-8 py-5 text-[11px] font-black uppercase tracking-widest">
+                <i class="fas fa-th-large text-xl"></i> Dashboard
+            </button>
+            <button onclick="navigate('leads')" id="nav-leads" class="nav-link w-full flex items-center gap-5 px-8 py-5 text-[11px] font-black uppercase tracking-widest text-orange-500/80">
+                <i class="fas fa-bolt text-xl"></i> Lead Stream
+            </button>
+            <button onclick="navigate('projects')" id="nav-projects" class="nav-link w-full flex items-center gap-5 px-8 py-5 text-[11px] font-black uppercase tracking-widest text-blue-500/80">
+                <i class="fas fa-rocket text-xl"></i> Production
+            </button>
+            <button onclick="navigate('recruitment')" id="nav-recruitment" class="nav-link w-full flex items-center gap-5 px-8 py-5 text-[11px] font-black uppercase tracking-widest text-purple-500/80">
+                <i class="fas fa-user-plus text-xl"></i> Careers
+            </button>
+            <button onclick="navigate('team')" id="nav-team" class="nav-link w-full flex items-center gap-5 px-8 py-5 text-[11px] font-black uppercase tracking-widest text-teal-500/80">
+                <i class="fas fa-users-cog text-xl"></i> Team Matrix
+            </button>
+        </nav>
+
+        <div class="pt-10 border-t border-white/[0.03]">
+            <button onclick="location.reload()" class="w-full py-4 text-zinc-700 hover:text-red-500 text-[10px] font-black uppercase flex items-center justify-center gap-2 transition tracking-[0.2em]">
+                <i class="fas fa-power-off"></i> Logout System
+            </button>
+        </div>
+    </aside>
+
+    <!-- 3. MAIN WORKSPACE -->
+    <main class="flex-grow h-screen flex flex-col overflow-hidden bg-zinc-950/40">
+        <!-- HEADERBAR -->
+        <header class="h-28 border-b border-white/[0.03] flex items-center justify-between px-20 shrink-0 bg-black/20 backdrop-blur-md">
+            <div class="flex items-center gap-6">
+                <div class="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_20px_#3b82f6]"></div>
+                <h3 id="viewTitle" class="text-[11px] font-black uppercase tracking-[0.4em] text-zinc-500 italic">Sector: Loading Hub...</h3>
+            </div>
+            <div class="flex items-center gap-12">
+                <div class="text-right">
+                    <p class="text-[10px] font-black uppercase text-zinc-600 tracking-widest italic mb-1">Server Runtime</p>
+                    <p id="clock" class="text-lg font-black tabular-nums text-white">00:00:00</p>
                 </div>
-                <button onclick="fetchAllData()" class="bg-blue-600 p-4 rounded-2xl hover:bg-blue-500 transition shadow-lg shadow-blue-600/20">
-                    <i id="syncIcon" class="fas fa-sync-alt text-white"></i>
+                <button onclick="refreshData()" class="w-16 h-16 glass-panel flex items-center justify-center hover:bg-blue-600 transition group border-white/10 shadow-2xl">
+                    <i id="syncIcon" class="fas fa-sync-alt text-lg group-hover:rotate-180 transition-transform duration-700"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Stats Overview -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
-            <div class="gradient-stat p-8 rounded-[2.5rem]">
-                <p class="text-zinc-500 text-[10px] font-black uppercase mb-2">Inquiry Stream</p>
-                <h3 class="text-5xl font-black italic tracking-tighter" id="projCount">0</h3>
-            </div>
-            <div class="gradient-stat p-8 rounded-[2.5rem]">
-                <p class="text-zinc-500 text-[10px] font-black uppercase mb-2">Talent Pool</p>
-                <h3 class="text-5xl font-black italic tracking-tighter" id="appCount">0</h3>
-            </div>
-            <div class="gradient-stat p-8 rounded-[2.5rem] border-blue-500/40">
-                <p class="text-blue-500 text-[10px] font-black uppercase mb-2">Ongoing Edits</p>
-                <h3 class="text-5xl font-black italic tracking-tighter" id="activeCount">0</h3>
-            </div>
-            <div class="glass p-8 rounded-[2.5rem] flex flex-col justify-center cursor-pointer hover:bg-white hover:text-black transition duration-500 group" onclick="window.open('https://docs.google.com/spreadsheets/d/1vM_Uq_P4j8oFm0z-nN8P5lK3P4_o1u6vK-DkG3C1uS8/edit', '_blank')">
-                <p class="text-zinc-500 text-[10px] font-black uppercase mb-2 group-hover:text-black/50">Raw Database</p>
-                <h3 class="text-xs font-black uppercase tracking-widest flex items-center">Open Sheets <i class="fas fa-external-link-alt ml-2 text-[10px]"></i></h3>
-            </div>
-        </div>
+        <!-- CONTENT VIEWPORT -->
+        <div class="p-20 overflow-y-auto flex-grow scroll-smooth" id="viewContainer">
 
-        <!-- Navigation System -->
-        <div class="flex p-1.5 glass w-fit mb-10 gap-1.5 rounded-2xl">
-            <button onclick="switchTab('projects')" id="btn-projects" class="tab-btn active">Project Leads</button>
-            <button onclick="switchTab('careers')" id="btn-careers" class="tab-btn">Recruitment</button>
-        </div>
-
-        <!-- DATA TABLES -->
-        <div id="projectsContent" class="glass overflow-hidden min-h-[500px] shadow-2xl mb-32">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm border-collapse">
-                    <thead class="bg-white/5 text-zinc-500 text-[10px] font-black uppercase tracking-[0.15em]">
-                        <tr>
-                            <th class="p-7">Client & ID</th>
-                            <th class="p-7">Team Assignment</th>
-                            <th class="p-7">Workflow Status</th>
-                            <th class="p-7">Delivery</th>
-                            <th class="p-7 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="projectsBody" class="divide-y divide-white/[0.03]">
-                        <tr><td colspan="5" class="p-32 text-center"><i class="fas fa-circle-notch fa-spin text-4xl text-blue-500 opacity-20"></i></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="careersContent" class="hidden glass overflow-hidden min-h-[500px] mb-32">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-white/5 text-zinc-500 text-[10px] font-black uppercase tracking-widest">
-                        <tr>
-                            <th class="p-7">Candidate</th>
-                            <th class="p-7">Role</th>
-                            <th class="p-7">Hiring Phase</th>
-                            <th class="p-7">Portfolio</th>
-                            <th class="p-7 text-right">HR Controls</th>
-                        </tr>
-                    </thead>
-                    <tbody id="careersBody" class="divide-y divide-white/[0.03]"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: DELIVERY SYSTEM -->
-    <div id="deliveryModal" class="modal-overlay">
-        <div class="glass p-12 w-full max-w-md shadow-2xl border-blue-500/30">
-            <h3 class="text-3xl font-black italic uppercase tracking-tighter mb-1">Final Delivery</h3>
-            <p id="modalClient" class="text-[10px] text-blue-500 font-black uppercase tracking-widest mb-10">Client Name</p>
-            <div class="space-y-8">
-                <div class="space-y-2">
-                    <label class="text-[9px] font-black uppercase text-zinc-500 ml-1">Asset Link (Google Drive/Dropbox)</label>
-                    <input type="url" id="driveInput" class="w-full bg-black border border-white/10 p-5 rounded-2xl outline-none focus:border-blue-500 text-xs transition placeholder:opacity-30" placeholder="https://drive.google.com/...">
-                </div>
-                <div class="flex gap-4">
-                    <button id="deliverSubmitBtn" onclick="submitProjectDelivery()" class="flex-1 bg-white text-black py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all duration-500">Deliver Assets & Notify</button>
-                    <button onclick="closeModal('deliveryModal')" class="px-8 py-5 text-zinc-500 text-[11px] font-black uppercase tracking-widest">Exit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: DELETE CONFIRMATION -->
-    <div id="deleteModal" class="modal-overlay">
-        <div class="glass p-12 w-full max-w-sm text-center border-red-500/20">
-            <div class="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl border border-red-500/20">
-                <i class="fas fa-trash-alt"></i>
-            </div>
-            <h3 class="text-2xl font-black uppercase italic mb-2">Delete Permanently?</h3>
-            <p class="text-zinc-500 text-xs mb-10 leading-relaxed">Aa entry sheet mathi hamesha mate delete thai jashe. Tame kharekhar delete karva mangu chho?</p>
-            <div class="flex gap-4">
-                <button id="confirmDeleteBtn" class="flex-1 bg-red-600 text-white py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-lg shadow-red-600/20">Yes, Delete</button>
-                <button onclick="closeModal('deleteModal')" class="flex-1 bg-zinc-900 text-zinc-400 py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer: Synced with Admin Theme -->
-    <footer class="admin-footer py-20 px-6 mt-20">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                <!-- Brand Column -->
-                <div class="md:col-span-1">
-                    <div class="text-3xl font-black tracking-tighter uppercase italic mb-6">VISUAL <span class="text-blue-500">FRAME</span></div>
-                    <p class="text-zinc-500 text-[11px] leading-relaxed font-bold uppercase tracking-widest max-w-[200px]">
-                        Cinematic vision and production management at scale.
-                    </p>
-                </div>
-                
-                <!-- Quick Navigation -->
-                <div>
-                    <h5 class="text-zinc-300 text-[10px] font-black uppercase tracking-[0.2em] mb-8">Navigation</h5>
-                    <ul class="space-y-4">
-                        <li><a href="index.html" class="text-zinc-500 hover:text-white text-[11px] font-bold uppercase tracking-widest transition">Home</a></li>
-                        <li><a href="portfolio.html" class="text-zinc-500 hover:text-white text-[11px] font-bold uppercase tracking-widest transition">Portfolio</a></li>
-                        <li><a href="careers.html" class="text-zinc-500 hover:text-white text-[11px] font-bold uppercase tracking-widest transition">Careers</a></li>
-                    </ul>
-                </div>
-
-                <!-- Admin Tools -->
-                <div>
-                    <h5 class="text-zinc-300 text-[10px] font-black uppercase tracking-[0.2em] mb-8">Management</h5>
-                    <ul class="space-y-4">
-                        <li><a href="contact.html" class="text-zinc-500 hover:text-white text-[11px] font-bold uppercase tracking-widest transition">Inquiries</a></li>
-                        <li><a href="admin.html" class="text-blue-500 hover:text-blue-400 text-[11px] font-black uppercase tracking-widest transition flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span> Terminal Dashboard
-                        </a></li>
-                    </ul>
-                </div>
-
-                <!-- Social Presence -->
-                <div>
-                    <h5 class="text-zinc-300 text-[10px] font-black uppercase tracking-[0.2em] mb-8">Follow</h5>
-                    <div class="flex gap-5 text-xl">
-                        <a href="https://instagram.com/visualframestudio" target="_blank" class="text-zinc-500 hover:text-white transition"><i class="fab fa-instagram"></i></a>
-                        <a href="https://youtube.com/@visualframestudio" target="_blank" class="text-zinc-500 hover:text-white transition"><i class="fab fa-youtube"></i></a>
-                        <a href="https://linkedin.com/company/Visual Frame.studio" target="_blank" class="text-zinc-500 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+            <!-- SECTOR: DASHBOARD -->
+            <section id="sector-dashboard" class="view-section active space-y-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    <div class="glass-panel p-10 shadow-[0_0_60px_rgba(59,130,246,0.12)] border-t-2 border-blue-500">
+                        <p class="text-[11px] font-black text-zinc-600 uppercase mb-5 tracking-widest">Active Production</p>
+                        <h2 class="text-7xl font-black italic tracking-tighter" id="stat-active">0</h2>
+                    </div>
+                    <div class="glass-panel p-10 border-t-2 border-green-500">
+                        <p class="text-[11px] font-black text-zinc-600 uppercase mb-5 tracking-widest">Completed</p>
+                        <h2 class="text-7xl font-black italic text-green-500 tracking-tighter" id="stat-done">0</h2>
+                    </div>
+                    <div class="glass-panel p-10 border-t-2 border-purple-500 shadow-[0_0_60px_rgba(168,85,247,0.12)]">
+                        <p class="text-[11px] font-black text-zinc-600 uppercase mb-5 tracking-widest">Pending Leads</p>
+                        <h2 class="text-7xl font-black italic text-purple-500 tracking-tighter" id="stat-leads">0</h2>
+                    </div>
+                    <div class="glass-panel p-10 border-t-2 border-blue-400">
+                        <p class="text-[11px] font-black text-zinc-600 uppercase mb-5 tracking-widest">Total Clients</p>
+                        <h2 class="text-7xl font-black italic text-blue-400 tracking-tighter" id="stat-clients">0</h2>
                     </div>
                 </div>
-            </div>
-            
-            <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="text-zinc-700 text-[9px] font-black uppercase tracking-[0.3em] italic">
-                    &copy; 2026 VISUAL FRAME STUDIO / CORE ENGINE v4.0.2
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+                    <div class="lg:col-span-2 glass-panel p-14">
+                        <div class="flex justify-between items-center mb-14">
+                            <h4 class="text-xs font-black uppercase tracking-[0.5em] text-zinc-500 italic">Live Studio Action Log</h4>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+                                <span class="text-[9px] font-black uppercase text-green-500">Realtime Stream</span>
+                            </div>
+                        </div>
+                        <div id="activityLog" class="space-y-8"></div>
+                    </div>
+                    <div class="glass-panel p-10 space-y-8 flex flex-col justify-center">
+                        <h4 class="text-xs font-black uppercase tracking-widest text-zinc-500 text-center mb-4 italic">Direct Access</h4>
+                        <button onclick="navigate('leads')" class="w-full py-6 bg-white text-black rounded-[2rem] font-black uppercase text-xs tracking-widest hover:bg-blue-600 hover:text-white transition shadow-2xl">New Job Entry</button>
+                        <button onclick="window.open('https://docs.google.com/spreadsheets/d/1vM_Uq_P4j8oFm0z-nN8P5lK3P4_o1u6vK-DkG3C1uS8/edit', '_blank')" class="w-full py-6 bg-zinc-900 border border-white/5 rounded-[2rem] font-black uppercase text-[10px] tracking-widest opacity-60 hover:opacity-100 transition">Inspect Database</button>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span class="text-zinc-700 text-[9px] font-black uppercase tracking-widest">System Operational</span>
+            </section>
+
+            <!-- SECTOR: LEADS HUB -->
+            <section id="sector-leads" class="view-section space-y-12">
+                <div class="flex justify-between items-center glass-panel p-8 px-12">
+                    <div class="flex items-center gap-8 flex-grow">
+                        <i class="fas fa-search text-zinc-800 text-2xl"></i>
+                        <input type="text" oninput="filterTable('leadsBody', this.value)" class="w-full border-none !bg-transparent !p-0 text-xl font-bold tracking-tight" placeholder="Filter lead identity stream...">
+                    </div>
                 </div>
-            </div>
+                <div class="glass-panel overflow-hidden">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-white/[0.02] text-zinc-700 text-[11px] font-black uppercase tracking-[0.4em]">
+                            <tr><th class="p-10">UID</th><th class="p-10">Identity</th><th class="p-10">Request</th><th class="p-10">Valuation</th><th class="p-10 text-center">Status</th><th class="p-10 text-right">Action</th></tr>
+                        </thead>
+                        <tbody id="leadsBody" class="divide-y divide-white/[0.03]"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTOR: PRODUCTION LINE -->
+            <section id="sector-projects" class="view-section space-y-12">
+                <div class="glass-panel overflow-hidden">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-white/[0.02] text-zinc-700 text-[11px] font-black uppercase tracking-[0.4em]">
+                            <tr><th class="p-10">ID</th><th class="p-10">Project</th><th class="p-10">Supervisor</th><th class="p-10">Deadline</th><th class="p-10">Phase</th><th class="p-10 text-center">Deliver</th><th class="p-10 text-right">Action</th></tr>
+                        </thead>
+                        <tbody id="projectsBody" class="divide-y divide-white/[0.03]"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTOR: RECRUITMENT -->
+            <section id="sector-recruitment" class="view-section space-y-12">
+                <div class="glass-panel overflow-hidden">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-white/[0.02] text-zinc-700 text-[11px] font-black uppercase tracking-[0.4em]">
+                            <tr><th class="p-10">Applicant</th><th class="p-10">Role</th><th class="p-10">Work Link</th><th class="p-10">Status</th><th class="p-10 text-right">Delete</th></tr>
+                        </thead>
+                        <tbody id="recruitmentBody" class="divide-y divide-white/[0.03]"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTOR: TEAM HUB -->
+            <section id="sector-team" class="view-section space-y-20">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h4 class="text-6xl font-black uppercase italic tracking-tighter">THE CORE <span class="text-blue-500">TEAM</span></h4>
+                        <p class="text-[11px] font-black text-zinc-600 uppercase tracking-[0.4em] mt-4 italic">Studio Matrix Foundation & Specialists</p>
+                    </div>
+                    <button onclick="openModal('addTeamModal')" class="bg-blue-600 px-12 py-5 rounded-[2rem] font-black uppercase text-xs tracking-widest hover:bg-blue-500 transition shadow-[0_0_40px_rgba(59,130,246,0.3)]">
+                        <i class="fas fa-plus-circle mr-3"></i> Register Specialist
+                    </button>
+                </div>
+
+                <!-- CORE LEADERS SECTION -->
+                <div class="space-y-10">
+                    <h5 class="text-[10px] font-black text-zinc-700 uppercase tracking-[0.5em] border-b border-white/[0.03] pb-4">Matrix Leaders</h5>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12" id="leaderGrid"></div>
+                </div>
+
+                <!-- TEAM ASSOCIATES SECTION -->
+                <div class="space-y-10">
+                    <h5 class="text-[10px] font-black text-zinc-700 uppercase tracking-[0.5em] border-b border-white/[0.03] pb-4">Matrix Associates</h5>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10" id="associateGrid"></div>
+                </div>
+            </section>
+
         </div>
-    </footer>
+    </main>
+
+    <!-- MODALS -->
+    <!-- FINAL REPAIRED ASSOCIATE ONBOARDING FORM -->
+    <div id="addTeamModal" class="modal-blur">
+        <div class="glass-panel p-12 w-full max-w-2xl border-white/10 shadow-2xl modal-content-anim">
+            
+            <!-- FORM STATE -->
+            <div id="formState">
+                <div class="flex justify-between items-center mb-10">
+                    <div>
+                        <h3 class="text-4xl font-black uppercase italic tracking-tighter text-white">Specialist <span class="text-blue-500">Onboarding</span></h3>
+                        <p class="text-[9px] font-black text-zinc-500 uppercase tracking-[0.4em] mt-2">Integrating New Matrix Node</p>
+                    </div>
+                    <button onclick="closeModal('addTeamModal')" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-500 transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="teamMemberForm" class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Identity Name</label>
+                            <input type="text" id="tmName" placeholder="e.g. Rahul Sharma" class="w-full" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Matrix Role</label>
+                            <input type="text" id="tmRole" placeholder="e.g. Motion Designer" class="w-full" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Tools / Software</label>
+                            <input type="text" id="tmSoftware" placeholder="Premiere, Blender, etc." class="w-full" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">WhatsApp Frequency</label>
+                            <input type="tel" id="tmWhatsapp" placeholder="+91 00000 00000" class="w-full" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Access Email</label>
+                            <input type="email" id="tmEmail" placeholder="specialist@visualframe.com" class="w-full" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Work Portfolio</label>
+                            <input type="url" id="tmPortfolio" placeholder="https://behance.net/..." class="w-full" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Assign Studio Lead</label>
+                            <select id="tmLead" class="w-full" required>
+                                <option value="Pranav Garasiya">Pranav Garasiya</option>
+                                <option value="Parth">Parth</option>
+                                <option value="Rutu">Rutu</option>
+                                <option value="Rupal">Rupal</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Cinematic Aura</label>
+                            <select id="tmColor" class="w-full" required>
+                                <option value="blue">Deep Blue Flux</option>
+                                <option value="purple">Royal Purple Pulse</option>
+                                <option value="pink">Electric Pink Aura</option>
+                                <option value="teal">Cyber Teal Matrix</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 pt-6">
+                        <button type="submit" id="tmSubmitBtn" class="flex-grow bg-blue-600 py-6 rounded-[2rem] font-black uppercase text-xs tracking-widest shadow-[0_0_40px_rgba(59,130,246,0.3)] hover:bg-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed">Execute Onboarding</button>
+                        <button type="button" onclick="closeModal('addTeamModal')" class="px-10 py-6 text-zinc-500 font-black uppercase text-xs tracking-widest hover:text-white">Abort</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- SUCCESS STATE -->
+            <div id="successState" class="text-center py-10">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+                <h4 class="text-2xl font-black uppercase italic tracking-tighter text-white mt-6">Node Integrated</h4>
+                <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-2">Specialist successfully linked to Matrix</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="initiateModal" class="modal-blur">
+        <div class="glass-panel p-16 w-full max-w-2xl border-blue-500/20 shadow-2xl">
+            <h3 class="text-4xl font-black uppercase italic mb-2 tracking-tighter">Onboard Matrix Job</h3>
+            <p id="initClientName" class="text-[10px] text-blue-500 font-black uppercase tracking-[0.3em] mb-14">Synchronizing Inbound Lead Data...</p>
+            <form id="initiationForm" class="space-y-8">
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Assign Operator</label>
+                        <select id="initAssignee" required></select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Deadline Sequence</label>
+                        <input type="date" id="initDeadline" required>
+                    </div>
+                </div>
+                <input type="url" id="initRawLink" placeholder="Raw Footage Asset Link" class="w-full">
+                <div class="flex gap-4 pt-10">
+                    <button type="submit" class="flex-grow bg-blue-600 py-6 rounded-[2rem] font-black uppercase text-xs tracking-widest shadow-2xl">Authorize Production</button>
+                    <button type="button" onclick="closeModal('initiateModal')" class="px-10 py-6 text-zinc-600 font-black uppercase text-xs">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deliveryModal" class="modal-blur">
+        <div class="glass-panel p-16 w-full max-w-lg text-center shadow-2xl">
+            <h3 class="text-4xl font-black uppercase italic mb-2 tracking-tighter">Final Asset Shipment</h3>
+            <p id="delClient" class="text-[10px] text-blue-500 font-black uppercase tracking-[0.4em] mb-12 italic">Target Protocol: Encrypted Delivery</p>
+            <input type="url" id="finalLink" placeholder="Google Drive Master Asset Link" class="w-full text-center mb-10 italic">
+            <button onclick="processFinalDelivery()" id="delBtn" class="w-full bg-white text-black py-6 rounded-[2.5rem] font-black uppercase text-xs tracking-widest shadow-2xl hover:bg-blue-600 hover:text-white transition-all duration-500">Deploy Assets & Notify</button>
+            <button onclick="closeModal('deliveryModal')" class="w-full py-4 text-zinc-700 font-black uppercase text-[10px] mt-4 tracking-widest">Back to Matrix</button>
+        </div>
+    </div>
 
     <script>
-        const CONTACT_API = "https://script.google.com/macros/s/AKfycbyD6-VZ64vpvQUAaaql-G_gxQBetL4LAMsFSJovEPeQma51crQ5DyRcCKINRjyeMpaLcA/exec"; 
-        const CAREERS_API = "https://script.google.com/macros/s/AKfycbw5O9avvfxlvjK8988mVBR531H4XPXTmFP8LA8q9Th4HXf41GvrGd1lxP9mJoxL9aN-LA/exec";
+        // API CONFIGURATION
+        const CONTACT_API = "https://script.google.com/macros/s/AKfycbwN0qGveoUHuaAmEQclzZP5wxTB5Ga2vAa3vucIYhsQhweEPAnF5kAfUCynlmDOIsRQPA/exec";
+        const PROJECTS_API = "https://script.google.com/macros/s/AKfycbwqT4XW6F121FeIh5ShIs9QqJiBUhw7ST4D3wl-JQ_-yLcs3GlXtMvLCoEaGID83yk1vw/exec"; 
+        const CAREERS_API = "https://script.google.com/macros/s/AKfycbzlPCCK_ygPM9S2p5XYVb_UdnGL8ZAWv3gZVZsnqSrt9ZoA2aHIKWq2YkDzmrT1XuXJRA/exec";
+        const TEAM_API = "https://script.google.com/macros/s/AKfycbzN5V4pNGrpcSFSaeXxdLVJm6WqkpQBUYA0VRWxWlTz9tnpubdU2OVwBHANNOn9YPF9/exec";
 
-        let activeTarget = null;
-        const studioTeam = ["Not Assigned", "Pranav Garasiya", "Parth", "Rutu", "Rupal"];
+        let DATABASE = { leads: [], projects: [], careers: [], team: [] };
+        let activeUID = null;
+        let selectedLead = null;
 
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg; t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 4000);
+        const CORE_TEAM = [
+            { uid: 'CORE-01', name: 'Pranav Garasiya', role: 'Creative Director', img: 'image/team gallery/Pranav 001.jpg', color: 'blue', page: 'Pranav.html' },
+            { uid: 'CORE-02', name: 'Parth', role: 'Lead Video Editor', img: 'image/team gallery/Parth 001.png', color: 'purple', page: 'Parth.html' },
+            { uid: 'CORE-03', name: 'Rutu', role: 'Art Director', img: 'image/team gallery/Rutu 001.jpg', color: 'pink', page: 'rutu.html' },
+            { uid: 'CORE-04', name: 'Rupal', role: 'Design Lead', img: 'image/team gallery/Rupal 001.jpg', color: 'teal', page: 'rupal.html' }
+        ];
+
+        function handleLogin() {
+            const pass = document.getElementById('loginPass').value;
+            if(pass === 'VF@ERP2025') {
+                document.getElementById('loginGate').style.display = 'none';
+                refreshData();
+                startClock();
+            } else {
+                const err = document.getElementById('loginError');
+                err.classList.remove('hidden');
+                setTimeout(() => document.getElementById('loginError').classList.add('hidden'), 2500);
+            }
         }
 
-        async function fetchAllData() {
+        function navigate(sectorId) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.getElementById(`sector-${sectorId}`).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(i => i.classList.remove('active'));
+            document.getElementById(`nav-${sectorId}`).classList.add('active');
+            document.getElementById('viewTitle').innerText = `Sector: ${sectorId.toUpperCase()}`;
+            window.scrollTo(0,0);
+        }
+
+        async function refreshData() {
             const icon = document.getElementById('syncIcon');
             icon.classList.add('fa-spin');
             try {
-                const [pRes, cRes] = await Promise.all([
-                    fetch(`${CONTACT_API}?cache=${Date.now()}`),
-                    fetch(`${CAREERS_API}?cache=${Date.now()}`)
+                const [l, p, c, t] = await Promise.all([
+                    fetch(`${CONTACT_API}?v=${Date.now()}`).then(r => r.json()),
+                    fetch(`${PROJECTS_API}?v=${Date.now()}`).then(r => r.json()).catch(() => []),
+                    fetch(`${CAREERS_API}?v=${Date.now()}`).then(r => r.json()),
+                    fetch(`${TEAM_API}?v=${Date.now()}`).then(r => r.json()).catch(() => [])
                 ]);
-                
-                const pData = await pRes.json();
-                const cData = await cRes.json();
-                
-                renderProjects(pData);
-                renderCareers(cData);
-                
-                document.getElementById('projCount').innerText = pData.length;
-                document.getElementById('appCount').innerText = cData.length;
-                document.getElementById('activeCount').innerText = pData.filter(i => i.Status === 'In Progress').length;
-                
-                showToast("Live Database Synced");
-            } catch (e) { 
-                console.error(e);
-                showToast("Connection Error! Refresh or Check Script Access"); 
-            }
+                DATABASE.leads = Array.isArray(l) ? l : [];
+                DATABASE.projects = Array.isArray(p) ? p : [];
+                DATABASE.careers = Array.isArray(c) ? c : [];
+                DATABASE.team = Array.isArray(t) ? t : [];
+                renderUI();
+                showToast("System State Finalized");
+            } catch(e) { showToast("Sync Failure"); }
             finally { icon.classList.remove('fa-spin'); }
         }
 
-        function renderProjects(data) {
-            const body = document.getElementById('projectsBody');
-            body.innerHTML = data.reverse().map(item => {
-                const uniqueID = item.UID || item.uid || item.Timestamp;
-                const rowId = `row-proj-${uniqueID}`;
+        function renderUI() {
+            const completedCount = DATABASE.projects.filter(p => (p.status || p.Status) === 'Completed').length;
+            document.getElementById('stat-active').innerText = DATABASE.projects.length - completedCount;
+            document.getElementById('stat-done').innerText = completedCount;
+            document.getElementById('stat-leads').innerText = DATABASE.leads.length;
+            document.getElementById('stat-clients').innerText = new Set(DATABASE.leads.map(l => l.email || l.Email)).size;
 
-                return `
-                <tr class="hover:bg-white/[0.02] transition" id="${rowId}">
-                    <td class="p-7">
-                        <div class="font-extrabold text-white text-base">${item.name || 'Anonymous'}</div>
-                        <div class="flex items-center gap-2 mt-1.5">
-                            <span class="badge-new">${uniqueID}</span>
-                            <span class="text-[9px] text-zinc-600 font-bold uppercase">${item.service || '-'}</span>
-                        </div>
+            document.getElementById('leadsBody').innerHTML = DATABASE.leads.slice().reverse().map(l => `
+                <tr class="hover:bg-white/[0.04] transition">
+                    <td class="p-10 font-black text-zinc-800 italic text-xs tracking-tighter">${l.uid || l.UID || '---'}</td>
+                    <td class="p-10">
+                        <div class="font-black text-white text-base tracking-tight uppercase">${l.name || l.Name}</div>
+                        <div class="text-[9px] text-zinc-600 font-bold uppercase mt-1 tracking-widest italic">${l.email || l.Email}</div>
                     </td>
-                    <td class="p-7">
-                        <select onchange="updateBackend('contact', '${uniqueID}', {assigned: this.value})" class="status-pill text-blue-400 border-blue-500/20 bg-blue-500/5">
-                            ${studioTeam.map(m => `<option value="${m}" ${item['Assigned To'] === m ? 'selected' : ''}>${m}</option>`).join('')}
+                    <td class="p-10"><div class="text-xs font-black uppercase text-blue-500 tracking-widest">${l.service || l.Service}</div></td>
+                    <td class="p-10 font-black text-white italic text-base tracking-tighter">₹${l.budget || l.Budget || '-'}</td>
+                    <td class="p-10 text-center"><span class="px-4 py-1.5 bg-yellow-500/10 text-yellow-500 rounded-full text-[9px] font-black uppercase tracking-widest border border-yellow-500/20">Pending</span></td>
+                    <td class="p-10 text-right">
+                        <button onclick='openInitiateModal("${l.uid || l.UID}", "${l.name || l.Name}", ${JSON.stringify(l).replace(/"/g, '&quot;')})' class="px-6 py-2.5 bg-blue-600/10 text-blue-500 rounded-xl font-black uppercase text-[9px] tracking-[0.2em] border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all">Onboard</button>
+                    </td>
+                </tr>`).join('');
+
+            document.getElementById('projectsBody').innerHTML = DATABASE.projects.slice().reverse().map(p => {
+                const status = (p.status || p.Status || 'In Progress');
+                return `<tr class="hover:bg-white/[0.03] transition">
+                    <td class="p-10 font-black text-blue-500 italic text-xs">${p.uid || p.UID || 'TBD'}</td>
+                    <td class="p-10"><div class="font-black text-white text-base tracking-tight uppercase">${p.name || p.Name}</div><div class="text-[9px] text-zinc-600 font-bold uppercase mt-1 tracking-widest">${p.service || p.Service}</div></td>
+                    <td class="p-10"><span class="associate-badge text-blue-400">${p.assignedto || p.assignedTo || 'Wait...'}</span></td>
+                    <td class="p-10 text-zinc-500 font-black italic text-xs tracking-widest">${p.deliverydate || p.deliveryDate || 'N/A'}</td>
+                    <td class="p-10">
+                        <select onchange="updateRecord('${p.uid || p.UID}', {status: this.value})" class="!py-1.5 !px-3 text-[10px] bg-zinc-900 border-white/5 rounded-xl font-black uppercase tracking-widest ${status === 'Completed' ? 'text-green-500' : 'text-yellow-500'}">
+                            <option value="In Progress" ${status === 'In Progress' ? 'selected' : ''}>Production</option>
+                            <option value="Review" ${status === 'Review' ? 'selected' : ''}>Review</option>
+                            <option value="Completed" ${status === 'Completed' ? 'selected' : ''}>Shipped</option>
                         </select>
                     </td>
-                    <td class="p-7">
-                        <select onchange="updateBackend('contact', '${uniqueID}', {status: this.value})" class="status-pill">
-                            <option value="Pending" ${item.Status === 'Pending' ? 'selected' : ''}>Pending</option>
-                            <option value="In Progress" ${item.Status === 'In Progress' ? 'selected' : ''}>Active</option>
-                            <option value="Completed" ${item.Status === 'Completed' ? 'selected' : ''}>Finished</option>
-                        </select>
-                    </td>
-                    <td class="p-7">
-                        ${item['Drive Link'] ? `<a href="${item['Drive Link']}" target="_blank" class="text-blue-500 text-[10px] font-black uppercase underline tracking-tighter">View Work Link</a>` : `<span class="text-zinc-800 text-[10px] font-black uppercase">Not Ready</span>`}
-                    </td>
-                    <td class="p-7 text-right">
-                        <div class="flex justify-end gap-3">
-                            <button onclick="openDeliveryModal('${uniqueID}', '${item.name}')" class="btn-action" title="Deliver"><i class="fas fa-paper-plane text-xs"></i></button>
-                            <a href="https://wa.me/${(item.whatsapp || '').toString().replace(/\D/g,'')}" target="_blank" class="btn-action text-green-500"><i class="fab fa-whatsapp"></i></a>
-                            <button onclick="confirmDelete('contact', '${uniqueID}')" class="btn-action btn-delete text-zinc-600"><i class="fas fa-trash text-xs"></i></button>
+                    <td class="p-10 text-center"><button onclick='openDeliveryModal("${p.uid || p.UID}", "${p.name || p.Name}")' class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto shadow-2xl hover:scale-110 transition"><i class="fas fa-paper-plane text-xs"></i></button></td>
+                    <td class="p-10 text-right"><button onclick="deleteRecord('projects', '${p.uid || p.UID}')" class="w-12 h-12 rounded-2xl bg-white/[0.02] text-zinc-800 hover:text-red-500 transition ml-auto"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                </tr>`;
+            }).join('');
+
+            document.getElementById('leaderGrid').innerHTML = CORE_TEAM.map(m => `
+                <div class="team-card glass-panel p-10 text-center group border-${m.color}-500/20 team-leader-card">
+                    <div class="w-44 h-44 mx-auto mb-8 rounded-full overflow-hidden shadow-2xl border-4 border-white/10 group-hover:border-${m.color}-500 relative transition-all">
+                        <a href="${m.page}"><img src="${m.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${m.name}" onerror="this.src='https://ui-avatars.com/api/?name=${m.name}'"></a>
+                    </div>
+                    <a href="${m.page}">
+                        <h4 class="text-xl font-black uppercase italic tracking-tighter text-white">${m.name}</h4>
+                        <p class="text-${m.color}-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">${m.role}</p>
+                    </a>
+                </div>`).join('');
+
+            // UPDATED ASSOCIATE GRID (Removed Image, Added Contact Info)
+            document.getElementById('associateGrid').innerHTML = DATABASE.team.length ? DATABASE.team.map(m => `
+                <div class="glass-panel p-10 text-center group relative overflow-hidden border-zinc-800/50 hover:border-blue-500/30 transition-all duration-500">
+                    <button onclick="deleteRecord('team', '${m.uid}')" class="absolute top-6 right-6 text-zinc-900 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times-circle text-lg"></i></button>
+                    
+                    <h4 class="text-2xl font-black uppercase italic tracking-tighter text-white">${m.name}</h4>
+                    <p class="text-blue-500 text-[10px] font-black uppercase tracking-widest mt-1 mb-6">${m.role}</p>
+                    
+                    <div class="space-y-4 text-center">
+                        <div class="associate-badge text-zinc-400 inline-block">Soft: ${m.software || 'N/A'}</div>
+                        
+                        <div class="flex flex-col items-center gap-2 mt-4">
+                            <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest"><i class="fas fa-envelope mr-2"></i> ${m.email || '-'}</p>
+                            <p class="text-[10px] text-green-500 font-bold uppercase tracking-widest"><i class="fab fa-whatsapp mr-2"></i> ${m.whatsapp || '-'}</p>
                         </div>
-                    </td>
-                </tr>
-            `}).join('');
+
+                        <div class="pt-6 flex flex-col gap-3">
+                            <a href="${m.portfolio}" target="_blank" class="px-6 py-2.5 bg-white/5 hover:bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all border border-white/5">View Portfolio</a>
+                            <div class="text-[8px] font-black text-zinc-700 uppercase tracking-widest">Reporting to: ${m.leadassociate || 'Matrix Lead'}</div>
+                        </div>
+                    </div>
+                </div>`).join('') : '<div class="col-span-full py-20 text-center text-zinc-800 text-[10px] font-black uppercase tracking-[0.4em]">No external specialists registered</div>';
+
+            const feed = DATABASE.leads.slice(-5).reverse();
+            document.getElementById('activityLog').innerHTML = feed.length ? feed.map(f => `
+                <div class="flex items-center justify-between py-5 border-b border-white/[0.02]">
+                    <div class="flex items-center gap-6">
+                        <div class="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-zinc-500"><span class="text-white">${f.name || f.Name}</span> signal captured for <span class="text-blue-500">${f.service || f.Service}</span></p>
+                    </div>
+                </div>`).join('') : '<p class="text-zinc-800 text-[10px] font-black uppercase text-center py-10 tracking-[0.2em]">Inbound stream offline</p>';
+
+            const allMembers = [...CORE_TEAM.map(m => m.name), ...DATABASE.team.map(m => m.name)];
+            document.getElementById('initAssignee').innerHTML = allMembers.map(name => `<option value="${name}">${name}</option>`).join('');
         }
 
-        function renderCareers(data) {
-            const body = document.getElementById('careersBody');
-            body.innerHTML = data.reverse().map(item => {
-                const uniqueID = item.UID || item.uid || item.Timestamp;
-                const rowId = `row-care-${uniqueID}`;
-
-                return `
-                <tr class="hover:bg-white/[0.02] transition" id="${rowId}">
-                    <td class="p-7">
-                        <div class="font-extrabold text-white text-base">${item.fullName || 'N/A'}</div>
-                        <div class="text-[9px] text-zinc-500 font-bold uppercase mt-1 italic">${item.email || '-'}</div>
-                    </td>
-                    <td class="p-7 text-[10px] font-black uppercase text-purple-400 tracking-widest">${item.position || '-'}</td>
-                    <td class="p-7">
-                         <select onchange="updateBackend('career', '${uniqueID}', {status: this.value})" class="status-pill">
-                            <option value="Pending" ${item.Status === 'Pending' ? 'selected' : ''}>Applied</option>
-                            <option value="Shortlisted" ${item.Status === 'Shortlisted' ? 'selected' : ''}>Review</option>
-                            <option value="Hired" ${item.Status === 'Hired' ? 'selected' : ''}>Hired</option>
-                            <option value="Rejected" ${item.Status === 'Rejected' ? 'selected' : ''}>Pass</option>
-                        </select>
-                    </td>
-                    <td class="p-7"><a href="${item.portfolio}" target="_blank" class="text-zinc-600 hover:text-white transition"><i class="fas fa-link text-xs"></i> Portfolio</a></td>
-                    <td class="p-7 text-right">
-                        <div class="flex justify-end gap-3">
-                             <a href="https://wa.me/${(item.whatsapp || '').toString().replace(/\D/g,'')}" target="_blank" class="btn-action text-green-500"><i class="fab fa-whatsapp text-lg"></i></a>
-                             <button onclick="confirmDelete('career', '${uniqueID}')" class="btn-action btn-delete text-zinc-600"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </td>
-                </tr>
-            `}).join('');
-        }
-
-        async function updateBackend(type, uid, obj) {
-            const api = type === 'contact' ? CONTACT_API : CAREERS_API;
-            const prefix = type === 'contact' ? 'proj' : 'care';
-            const row = document.getElementById(`row-${prefix}-${uid}`);
-            if(row) row.classList.add('row-updating');
-
+        // TEAM MEMBER SUBMISSION (With Lock & Success FX)
+        document.getElementById('teamMemberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('tmSubmitBtn');
+            
+            // Prevent multiple submissions
+            if(submitBtn.disabled) return;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerText = "EXECUTING NODE LINK...";
+            
             const fd = new FormData();
-            fd.append('action', 'updateData');
-            fd.append('uid', uid); 
-            if(obj.status) fd.append('status', obj.status);
-            if(obj.driveLink) fd.append('driveLink', obj.driveLink);
-            if(obj.assigned) fd.append('assignedTo', obj.assigned);
+            fd.append('action', 'submit');
+            fd.append('uid', 'TM-' + Math.floor(1000 + Math.random() * 9000));
+            fd.append('name', document.getElementById('tmName').value);
+            fd.append('role', document.getElementById('tmRole').value);
+            fd.append('software', document.getElementById('tmSoftware').value);
+            fd.append('portfolio', document.getElementById('tmPortfolio').value);
+            fd.append('email', document.getElementById('tmEmail').value);
+            fd.append('whatsapp', document.getElementById('tmWhatsapp').value);
+            fd.append('leadassociate', document.getElementById('tmLead').value);
+            fd.append('themeColor', document.getElementById('tmColor').value);
             
             try {
-                const response = await fetch(api, { method: 'POST', body: fd });
-                const text = await response.text();
-                showToast("Sync Successful: Data Saved");
-                fetchAllData();
-            } catch (error) {
-                console.error(error);
-                showToast("Sync Failed! Check connection");
-                fetchAllData();
-            } finally {
-                if(row) row.classList.remove('row-updating');
+                await fetch(TEAM_API, { method: 'POST', body: fd });
+                
+                // Show Success Animation
+                document.getElementById('formState').style.display = 'none';
+                document.getElementById('successState').style.display = 'block';
+                
+                showToast("Integrated Successfully");
+                refreshData();
+                
+                // Auto-close after animation
+                setTimeout(() => {
+                    closeModal('addTeamModal');
+                    // Reset modal for next use
+                    setTimeout(() => {
+                        document.getElementById('formState').style.display = 'block';
+                        document.getElementById('successState').style.display = 'none';
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = "Execute Onboarding";
+                        e.target.reset();
+                    }, 500);
+                }, 2500);
+                
+            } catch(error) {
+                showToast("Connection Fault!");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Retry Onboarding";
             }
-        }
+        });
 
-        function confirmDelete(type, uid) {
-            activeTarget = { type, uid };
-            document.getElementById('deleteModal').style.display = 'flex';
-        }
-
-        document.getElementById('confirmDeleteBtn').onclick = async () => {
-            const btn = document.getElementById('confirmDeleteBtn');
-            const originalText = btn.innerText;
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
-            const api = activeTarget.type === 'contact' ? CONTACT_API : CAREERS_API;
-            const fd = new FormData();
-            fd.append('action', 'deleteData');
-            fd.append('uid', activeTarget.uid);
-            
-            try {
-                await fetch(api, { method: 'POST', body: fd });
-                closeModal('deleteModal');
-                showToast("Record Removed");
-                fetchAllData();
-            } catch (e) {
-                showToast("Delete Failed");
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        };
-
-        function openDeliveryModal(uid, name) {
-            activeTarget = { uid, name };
-            document.getElementById('modalClient').innerText = name;
-            document.getElementById('deliveryModal').style.display = 'flex';
-        }
-
-        async function submitProjectDelivery() {
-            const link = document.getElementById('driveInput').value;
-            const btn = document.getElementById('deliverSubmitBtn');
-            if(!link) return alert("Please paste the Google Drive link!");
-            
-            btn.innerText = "Syncing & Mailing...";
-            btn.disabled = true;
-
-            try {
-                await updateBackend('contact', activeTarget.uid, { status: 'Completed', driveLink: link });
-                showToast("Assets Delivered & Mail Sent");
-                closeModal('deliveryModal');
-                document.getElementById('driveInput').value = "";
-                fetchAllData();
-            } catch (e) {
-                showToast("Delivery Failed");
-            } finally {
-                btn.innerText = "Deliver Assets & Notify";
-                btn.disabled = false;
-            }
-        }
-
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openInitiateModal(uid, name, data) { activeUID = uid; selectedLead = data; document.getElementById('initClientName').innerText = `Mapping Identity: ${name}`; openModal('initiateModal'); }
         
-        function switchTab(tab) {
-            document.getElementById('projectsContent').classList.toggle('hidden', tab !== 'projects');
-            document.getElementById('careersContent').classList.toggle('hidden', tab !== 'careers');
-            document.getElementById('btn-projects').classList.toggle('active', tab === 'projects');
-            document.getElementById('btn-careers').classList.toggle('active', tab === 'careers');
+        document.getElementById('initiationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.innerText = "AUTHORIZING..."; btn.disabled = true;
+            try {
+                const fd = new FormData();
+                fd.append('action', 'submit'); fd.append('uid', activeUID);
+                fd.append('name', selectedLead.name || selectedLead.Name);
+                fd.append('email', selectedLead.email || selectedLead.Email);
+                fd.append('whatsapp', selectedLead.whatsapp || selectedLead.WhatsApp);
+                fd.append('service', selectedLead.service || selectedLead.Service);
+                fd.append('budget', selectedLead.budget || selectedLead.Budget);
+                fd.append('assignedTo', document.getElementById('initAssignee').value);
+                fd.append('deliveryDate', document.getElementById('initDeadline').value);
+                fd.append('rawFileLink', document.getElementById('initRawLink').value);
+                fd.append('status', 'In Progress');
+                await fetch(PROJECTS_API, { method: 'POST', body: fd });
+                const lfd = new FormData(); lfd.append('action', 'deleteData'); lfd.append('uid', activeUID);
+                await fetch(CONTACT_API, { method: 'POST', body: lfd });
+                closeModal('initiateModal'); refreshData(); navigate('projects'); showToast("Production Live");
+            } catch(e) { showToast("Transfer Fault!"); }
+            finally { btn.innerText = "Authorize Production"; btn.disabled = false; }
+        });
+
+        function openDeliveryModal(uid, name) { activeUID = uid; document.getElementById('delClient').innerText = name; openModal('deliveryModal'); }
+
+        async function processFinalDelivery() {
+            const link = document.getElementById('finalLink').value;
+            if(!link) return;
+            const btn = document.getElementById('delBtn');
+            btn.innerText = "SHIPPING..."; btn.disabled = true;
+            try {
+                const fd = new FormData(); fd.append('action', 'updateData'); fd.append('uid', activeUID);
+                fd.append('status', 'Completed'); fd.append('driveLink', link);
+                await fetch(PROJECTS_API, { method: 'POST', body: fd });
+                showToast("Assets Shipped"); closeModal('deliveryModal'); refreshData();
+            } catch(e) { showToast("Deployment Fault!"); }
+            finally { btn.innerText = "Ship & Send Invoice"; btn.disabled = false; }
         }
 
-        window.onload = fetchAllData;
+        async function updateRecord(uid, obj) {
+            const fd = new FormData(); fd.append('action', 'updateData'); fd.append('uid', uid);
+            if(obj.status) fd.append('status', obj.status);
+            await fetch(PROJECTS_API, { method: 'POST', body: fd });
+            showToast("Sync Success"); refreshData();
+        }
+
+        async function deleteRecord(type, uid) {
+            if(!confirm("Purge?")) return;
+            const api = type === 'leads' ? CONTACT_API : (type === 'projects' ? PROJECTS_API : (type === 'team' ? TEAM_API : CAREERS_API));
+            const fd = new FormData(); fd.append('action', 'deleteData'); fd.append('uid', uid);
+            await fetch(api, { method: 'POST', body: fd });
+            showToast("Purge Complete"); refreshData();
+        }
+
+        // UTILITIES
+        function openModal(id) { 
+            const el = document.getElementById(id);
+            el.style.display = 'flex'; 
+        }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(()=>t.style.display='none', 4000); }
+        function startClock() { setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000); }
+        function filterTable(id, q) { document.querySelectorAll(`#${id} tr`).forEach(r => r.style.display = r.innerText.toLowerCase().includes(q.toLowerCase()) ? '' : 'none'); }
     </script>
 </body>
 </html>
